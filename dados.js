@@ -5,8 +5,8 @@
            · "calc" Calculado (conta feita aqui a partir de outros números) · "alegacao" ainda sem confirmação.
    Para atualizar: preencha t2 = {f, l} e troque o status. O site recalcula tudo sozinho. */
 window.URNAS = {
-  atualizado: "25/10/2026 · 23h20 no Japão · 11h20 em Brasília (exterior conferido: ainda só Ásia e Oceania)",
-  aviso: "Exterior: Ásia e Oceania já apuradas por boletim de urna. Europa, África e Américas votam até a tarde. O TSE divulga tudo a partir das 17h de Brasília (5h de segunda no Japão).",
+  atualizado: "25/10/2026 · 23h25 no Japão · 11h25 em Brasília (entraram os Emirados Árabes)",
+  aviso: "Exterior: Ásia, Oceania e Emirados Árabes já apurados por boletim de urna. Europa, África e Américas votam até a tarde. O TSE divulga tudo a partir das 17h de Brasília (5h de segunda no Japão).",
 
   brasil: {
     t1: { f: 56104503, l: 53879538, validos: 119300788 }, t2: null,
@@ -52,8 +52,8 @@ window.URNAS = {
 
   exterior: {
     t1: { f: 143900, l: 157387, fp: 43.49, lp: 47.57 },
-    t2: { f: 32870, l: 14629, parcial: true },
-    t2nota: "Soma parcial dos 11 países da Ásia e da Oceania já apurados (boletins até as 8h de Brasília). Ainda não inclui Europa, África e Américas, onde estão quase 9 de cada 10 eleitores do exterior.",
+    t2: { f: 33642, l: 15272, parcial: true },
+    t2nota: "Soma parcial dos 12 países que já fecharam as urnas (Ásia, Oceania e Emirados Árabes), por boletim de urna. Ainda não inclui Europa, Américas e África, onde estão quase 9 de cada 10 eleitores do exterior.",
     paises: [
       /* ---------- Ásia ---------- */
       { id: "japao", nome: "Japão", cont: "Ásia", eleitores: 88293, status: "aberto",
@@ -76,6 +76,9 @@ window.URNAS = {
       { id: "singapura", nome: "Singapura", cont: "Ásia", status: "aberto", t1: null, t2: { f: 121, l: 213 }, nota: "Sem o número exato do 1º turno nas fontes (Lula teve 54,6%)." },
       { id: "malasia", nome: "Malásia", cont: "Ásia", status: "aberto", t1: null, t2: { f: 44, l: 41 }, nota: "No 1º turno as fontes só trazem os 44 votos de Lula (53,7%)." },
       { id: "indonesia", nome: "Indonésia", cont: "Ásia", status: "aberto", t1: null, t2: { f: 23, l: 15 }, nota: "No 1º turno as fontes só trazem os 19 votos de Flávio (61,3%)." },
+      /* ---------- Oriente Médio ---------- */
+      { id: "emirados", nome: "Emirados Árabes Unidos", cont: "Oriente Médio", status: "aberto",
+        t1: { f: 659, l: 512 }, t2: { f: 772, l: 643 }, nota: "Dubai e Abu Dhabi. 2º turno: soma dos boletins publicada às 11h de Brasília." },
       /* ---------- Oceania ---------- */
       { id: "australia", nome: "Austrália", cont: "Oceania", eleitores: 20274, status: "aberto",
         t1: { f: 2579, l: 4562 }, t2: { f: 3465, l: 6017 }, nota: "2º turno: soma dos boletins (Metrópoles).",
@@ -146,6 +149,7 @@ window.URNAS = {
     ["Hub Político: 1º turno por estado (dados do TSE)", "https://hubpolitico.com.br/eleicoes/2026/apuracao/presidente/estados"],
     ["Hub Político: 1º turno por região", "https://hubpolitico.com.br/eleicoes/2026/apuracao/presidente/regioes"],
     ["Elves: 1º turno por país e cidade (dados do TSE)", "https://elves.com.br/apuracao-eleitoral/paises/"],
+    ["Brasil 247: Emirados Árabes no 2º turno", "https://www.brasil247.com/mundo/eleicoes-no-exterior-flavio-bolsonaro-vence-o-2o-turno-nos-emirados-arabes-unidos/"],
     ["Exame: 2º turno no exterior, parcial das 10h", "https://exame.com/brasil/lula-ou-flavio-bolsonaro-quem-esta-ganhando-no-exterior-no-2o-turno-das-eleicoes/"],
     ["Metrópoles: 2º turno no exterior, parcial das 8h", "https://www.metropoles.com/mundo/votacao-no-exterior-lula-sai-na-frente-de-flavio-em-apuracao-parcial"],
     ["CNN: 2º turno no exterior por país", "https://www.cnnbrasil.com.br/internacional/eleicoes-2026-exterior-boletins-urna-flavio-lula/"],
