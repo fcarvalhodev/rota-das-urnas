@@ -5,8 +5,8 @@
            · "calc" Calculado (conta feita aqui a partir de outros números) · "alegacao" ainda sem confirmação.
    Para atualizar: preencha t2 = {f, l} e troque o status. O site recalcula tudo sozinho. */
 window.URNAS = {
-  atualizado: "25/10/2026 · 23h25 no Japão · 11h25 em Brasília (entraram os Emirados Árabes)",
-  aviso: "Exterior: Ásia, Oceania e Emirados Árabes já apurados por boletim de urna. Europa, África e Américas votam até a tarde. O TSE divulga tudo a partir das 17h de Brasília (5h de segunda no Japão).",
+  atualizado: "26/10/2026 · 2h55 no Japão · 14h55 em Brasília (exterior: parcial das 13h54)",
+  aviso: "Exterior: Ásia, Oceania, Oriente Médio, África e parte da Europa já apurados por boletim de urna. Portugal, Américas e o resto da Europa ainda estão votando ou contando. O TSE divulga tudo a partir das 17h de Brasília (5h de segunda no Japão).",
 
   brasil: {
     t1: { f: 56104503, l: 53879538, validos: 119300788 }, t2: null,
@@ -52,8 +52,8 @@ window.URNAS = {
 
   exterior: {
     t1: { f: 143900, l: 157387, fp: 43.49, lp: 47.57 },
-    t2: { f: 33642, l: 15272, parcial: true },
-    t2nota: "Soma parcial dos 12 países que já fecharam as urnas (Ásia, Oceania e Emirados Árabes), por boletim de urna. Ainda não inclui Europa, Américas e África, onde estão quase 9 de cada 10 eleitores do exterior.",
+    t2: { f: 39156, l: 29864, parcial: true },
+    t2nota: "Soma parcial de 41 países e territórios já contados por boletim de urna, às 13h54 de Brasília (Congresso em Foco). Ainda faltam Portugal, Espanha, Itália, Reino Unido, Suíça, Américas e a maior parte da Alemanha e da França.",
     paises: [
       /* ---------- Ásia ---------- */
       { id: "japao", nome: "Japão", cont: "Ásia", eleitores: 88293, status: "aberto",
@@ -76,7 +76,15 @@ window.URNAS = {
       { id: "singapura", nome: "Singapura", cont: "Ásia", status: "aberto", t1: null, t2: { f: 121, l: 213 }, nota: "Sem o número exato do 1º turno nas fontes (Lula teve 54,6%)." },
       { id: "malasia", nome: "Malásia", cont: "Ásia", status: "aberto", t1: null, t2: { f: 44, l: 41 }, nota: "No 1º turno as fontes só trazem os 44 votos de Lula (53,7%)." },
       { id: "indonesia", nome: "Indonésia", cont: "Ásia", status: "aberto", t1: null, t2: { f: 23, l: 15 }, nota: "No 1º turno as fontes só trazem os 19 votos de Flávio (61,3%)." },
-      /* ---------- Oriente Médio ---------- */
+      /* ---------- Oriente Médio (2º turno: boletins, Congresso em Foco, 13h54) ---------- */
+      { id: "libano", nome: "Líbano", cont: "Oriente Médio", status: "aberto", t1: { f: 1138, l: 2538 }, t2: { f: 1276, l: 2736 }, nota: "13 de 13 urnas." },
+      { id: "catar", nome: "Catar", cont: "Oriente Médio", status: "aberto", t1: { f: 173, l: 147 }, t2: { f: 195, l: 159 }, nota: "Doha, 1 urna." },
+      { id: "israel", nome: "Israel", cont: "Oriente Médio", status: "aberto", t1: null, t2: { f: 699, l: 166 }, nota: "5 de 5 urnas. Sem o número exato do 1º turno nas fontes consultadas (Flávio teve 74,3%)." },
+      { id: "palestina", nome: "Palestina", cont: "Oriente Médio", status: "aberto", t1: null, t2: { f: 46, l: 1000 }, nota: "3 de 3 urnas. Sem o número exato do 1º turno nas fontes consultadas (Lula teve 93,2%)." },
+      { id: "jordania", nome: "Jordânia", cont: "Oriente Médio", status: "aberto", t1: null, t2: { f: 76, l: 725 }, nota: "2 de 2 urnas. Sem o número exato do 1º turno nas fontes consultadas (Lula teve 86,2%)." },
+      /* ---------- África ---------- */
+      { id: "africa-do-sul", nome: "África do Sul", cont: "África", status: "aberto", t1: null, t2: { f: 256, l: 186 }, nota: "2 de 2 urnas. Sem o número exato do 1º turno nas fontes consultadas (Flávio teve 54,9%)." },
+      { id: "quenia", nome: "Quênia", cont: "África", status: "aberto", t1: { f: 17, l: 26 }, t2: { f: 16, l: 29 }, nota: "Nairóbi, 1 urna." },
       { id: "emirados", nome: "Emirados Árabes Unidos", cont: "Oriente Médio", status: "aberto",
         t1: { f: 659, l: 512 }, t2: { f: 772, l: 643 }, nota: "Dubai e Abu Dhabi. 2º turno: soma dos boletins publicada às 11h de Brasília." },
       /* ---------- Oceania ---------- */
@@ -108,12 +116,16 @@ window.URNAS = {
           { id: "vancouver", nome: "Vancouver", t1: { f: 1873, l: 3221 }, t2: null },
           { id: "ottawa", nome: "Ottawa", t1: { f: 395, l: 794 }, t2: null } ] },
       /* ---------- Europa ---------- */
+      { id: "austria", nome: "Áustria", cont: "Europa", status: "aberto", t1: { f: 311, l: 979 }, t2: { f: 393, l: 1178 }, nota: "Viena, 5 de 5 urnas." },
+      { id: "dinamarca", nome: "Dinamarca", cont: "Europa", status: "aberto", t1: { f: 195, l: 1166 }, t2: { f: 243, l: 1383 }, nota: "Copenhague, 4 de 4 urnas." },
+      { id: "finlandia", nome: "Finlândia", cont: "Europa", status: "aberto", t1: null, t2: { f: 185, l: 550 }, nota: "Helsinque, 2 de 2 urnas. Sem o número exato do 1º turno nas fontes consultadas (Lula teve 68,5%)." },
+      { id: "grecia", nome: "Grécia", cont: "Europa", status: "aberto", t1: null, t2: { f: 311, l: 255 }, nota: "Atenas, 2 de 2 urnas. No 1º turno, Flávio teve 230 votos (46,6%); o número exato de Lula não está nas fontes." },
       { id: "portugal", nome: "Portugal", cont: "Europa", eleitores: 134374, status: "doc", t1: { f: 19412, l: 26401 }, t2: null, nota: "2º maior eleitorado brasileiro fora do país.",
         cidades: [
           { id: "lisboa", nome: "Lisboa", t1: { f: 10548, l: 14948 }, t2: null },
           { id: "porto", nome: "Porto", t1: { f: 7559, l: 10356 }, t2: null },
           { id: "faro", nome: "Faro", t1: { f: 1305, l: 1097 }, t2: null } ] },
-      { id: "alemanha", nome: "Alemanha", cont: "Europa", eleitores: 41401, status: "doc", t1: { f: 3532, l: 13525 }, t2: null,
+      { id: "alemanha", nome: "Alemanha", cont: "Europa", eleitores: 41401, status: "aberto", t1: { f: 3532, l: 13525 }, t2: { f: 601, l: 2147, pst: 12.9 }, nota: "2º turno: só 8 de 62 urnas contadas às 13h54 de Brasília. Não dá para comparar com o 1º turno ainda.",
         cidades: [
           { id: "berlim", nome: "Berlim", t1: { f: 925, l: 6504 }, t2: null },
           { id: "frankfurt", nome: "Frankfurt", t1: { f: 1320, l: 3657 }, t2: null },
@@ -130,8 +142,8 @@ window.URNAS = {
         cidades: [
           { id: "milao", nome: "Milão", t1: { f: 2908, l: 3593 }, t2: null },
           { id: "roma", nome: "Roma", t1: { f: 1478, l: 2555 }, t2: null } ] },
-      { id: "franca", nome: "França", cont: "Europa", eleitores: 32744, status: "doc", t1: { f: 2276, l: 9253 }, t2: null,
-        nota: "Inclui Caiena (Guiana Francesa), por isso o total é maior que o de outras fontes que separam o território.",
+      { id: "franca", nome: "França", cont: "Europa", eleitores: 32744, status: "aberto", t1: { f: 2276, l: 9253 }, t2: { f: 112, l: 929, pst: 10.5 },
+        nota: "2º turno: só 4 de 38 urnas contadas às 13h54 de Brasília; não dá para comparar ainda. O 1º turno inclui Caiena (Guiana Francesa).",
         cidades: [
           { id: "paris", nome: "Paris", t1: { f: 1654, l: 8054 }, t2: null },
           { id: "marselha", nome: "Marselha", t1: { f: 104, l: 715 }, t2: null },
@@ -149,6 +161,8 @@ window.URNAS = {
     ["Hub Político: 1º turno por estado (dados do TSE)", "https://hubpolitico.com.br/eleicoes/2026/apuracao/presidente/estados"],
     ["Hub Político: 1º turno por região", "https://hubpolitico.com.br/eleicoes/2026/apuracao/presidente/regioes"],
     ["Elves: 1º turno por país e cidade (dados do TSE)", "https://elves.com.br/apuracao-eleitoral/paises/"],
+    ["Congresso em Foco: 41 países no 2º turno, 13h54", "https://www.congressoemfoco.com.br/noticia/123603/primeiras-urnas-sao-apuradas-no-exterior-acompanhe-os-resultados"],
+    ["Elves: Líbano, Áustria, Dinamarca e Catar no 1º turno", "https://elves.com.br/apuracao-eleitoral/paises/"],
     ["Brasil 247: Emirados Árabes no 2º turno", "https://www.brasil247.com/mundo/eleicoes-no-exterior-flavio-bolsonaro-vence-o-2o-turno-nos-emirados-arabes-unidos/"],
     ["Exame: 2º turno no exterior, parcial das 10h", "https://exame.com/brasil/lula-ou-flavio-bolsonaro-quem-esta-ganhando-no-exterior-no-2o-turno-das-eleicoes/"],
     ["Metrópoles: 2º turno no exterior, parcial das 8h", "https://www.metropoles.com/mundo/votacao-no-exterior-lula-sai-na-frente-de-flavio-em-apuracao-parcial"],
