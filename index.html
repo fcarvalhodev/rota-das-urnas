@@ -109,6 +109,39 @@ p{margin:0}
 .mini .cap b{font-family:var(--ui);font-size:12px;font-weight:800;letter-spacing:0;color:var(--c,var(--muted))}
 .grp{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:10px;display:flex;justify-content:space-between;gap:8px}
 
+
+/* crescimento + gráfico lado a lado */
+.growth{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:10px}
+.gt{display:grid;gap:4px;align-content:start;background:var(--soft);border-left:6px solid var(--c);border-radius:6px;padding:12px 14px}
+.who2{font-family:var(--ui);font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--c)}
+.who2 i{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--c);margin-right:6px;vertical-align:-1px}
+.gbig{font-family:var(--display);font-stretch:62%;font-weight:900;font-size:clamp(48px,11vw,64px);line-height:.95;color:var(--c)}
+.gbig.wait{font-size:clamp(30px,7vw,40px);color:var(--muted)}
+.gsub{font-family:var(--ui);font-size:15px;line-height:1.4;color:var(--muted)} .gsub b{color:var(--ink)}
+.sh{font-family:var(--ui);font-size:14px;line-height:1.35;color:var(--muted);border-top:1px solid var(--line);padding-top:6px;margin-top:2px}
+.sh small{font-size:12px}
+.nowrap{white-space:nowrap}
+.gchart{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,4vw,40px);height:260px;padding-top:28px}
+.gg{display:grid;grid-template-rows:minmax(0,1fr) auto auto;gap:4px;min-width:0}
+.gb{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end;border-bottom:2px solid var(--ink);min-height:0}
+.cb{position:relative;border-radius:6px 6px 0 0;background:var(--c);transform-origin:bottom;animation:grow .6s ease-out both}
+.cb.t1{background:color-mix(in oklab,var(--c) 30%,var(--paper));border:2px solid var(--c);border-bottom:0}
+.cb span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);padding-bottom:4px;font-family:var(--mono);font-weight:600;font-size:clamp(11px,3vw,14px);white-space:nowrap;color:var(--ink)}
+.cb.ph{height:38%;background:repeating-linear-gradient(45deg,var(--soft) 0 7px,transparent 7px 14px);border:1px dashed var(--line);border-bottom:0;animation:none}
+.cb.ph span{position:static;transform:none;display:grid;place-content:center;height:100%;padding:0;font-family:var(--ui);font-size:12px;color:var(--muted);white-space:normal;text-align:center}
+.gx{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;letter-spacing:.03em}
+.gn{font-family:var(--ui);font-size:17px;text-align:center;color:var(--c)}
+.gleg{display:flex;flex-wrap:wrap;gap:4px 16px;font-family:var(--ui);font-size:13px;font-weight:600;color:var(--muted)}
+.gleg i{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+.gleg .k1{background:color-mix(in oklab,var(--muted) 25%,var(--paper));border:2px solid var(--muted)} .gleg .k2{background:var(--muted)}
+@keyframes grow{from{transform:scaleY(0)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){.cb{animation:none}}
+.rg{grid-column:1;display:flex;flex-wrap:wrap;gap:2px 14px;align-items:center;font-family:var(--ui);font-size:15px;font-weight:600}
+.rg>span i{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c);margin-right:5px}
+.rg>span b{color:var(--c);font-weight:800}
+.rg .mut{color:var(--muted);font-weight:500;font-size:14px}
+.rg .rd{margin-left:auto;font-size:13px;font-weight:800;color:var(--c)}
+
 /* mapa de quadradinhos */
 .mapbox{display:grid;gap:12px}
 .seg{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;justify-self:start;flex-wrap:wrap}
@@ -196,20 +229,55 @@ function bar(label,t,withOthers){
   return `<div class="split"><div class="lab"><span>${label}</span><span>${o?'com os outros candidatos':'só os dois'}</span></div>
   <div class="bar" role="img" aria-label="${label}: Lula ${pc(l)}%, Flávio ${pc(f)}%${o?`, outros ${pc(o)}%`:''}"><span class="l" style="width:${l}%">${l>9?pc(l)+'%':''}</span>${o?`<span class="o" style="width:${o}%">${o>9?pc(o)+'%':''}</span>`:''}<span class="f" style="width:${f}%">${f>9?pc(f)+'%':''}</span></div></div>`;
 }
-function votes(t,lbl){ return has(t)?`<p class="note">${lbl}: Lula <b>${fmt(t.l)}</b> · Flávio <b>${fmt(t.f)}</b></p>`:''; }
+const gr=(a,b)=>(b-a)/a*100;
+const gp=n=>(n>=0?'+':'−')+pc(Math.abs(n))+'%';
+const cmp=n=>n>=1e6?pc(n/1e6)+' mi':fmt(n);
+const WHO={l:['Lula','var(--lula)'],f:['Flávio','var(--flavio)']};
+function pShare(t,k,withOthers){ // fatia dos válidos
+  if(!t) return null; if(withOthers&&t[k+'p']!=null) return t[k+'p'];
+  const s=share(t); return s==null?null:(k==='l'?s:100-s); }
+function growthTile(k,t1,t2,withOthers){
+  const [nm,c]=WHO[k], v1=has(t1)?t1[k]:null, v2=has(t2)?t2[k]:null;
+  let big,sub,cls='';
+  if(v1!=null&&v2!=null){ big=gp(gr(v1,v2)); sub=`<b>${fmt(v1)}</b> → <b>${fmt(v2)}</b> votos <span class="nowrap">(${sgn(v2-v1)})</span>`; }
+  else if(v1!=null){ big='aguardando'; cls=' wait'; sub=`<b>${fmt(v1)}</b> votos no 1º turno`; }
+  else if(v2!=null){ big=fmt(v2); cls=' wait'; sub='votos no 2º turno. Sem o número exato do 1º turno.'; }
+  else { big='—'; cls=' wait'; sub=''; }
+  const p1=pShare(t1,k,withOthers), p2=pShare(t2,k,false);
+  const sh=p1!=null||p2!=null?`<span class="sh">Fatia dos votos válidos: ${p1!=null?pc(p1)+'%':'—'} → ${p2!=null?pc(p2)+'%':'—'}${withOthers&&t1&&t1[k+'p']!=null?'<br><small>no 1º turno, contando os outros candidatos</small>':''}</span>`:'';
+  return `<div class="gt" style="--c:${c}"><span class="who2"><i></i>${nm}</span><b class="gbig${cls}">${big}</b><span class="gsub">${v1!=null&&v2!=null?'de votos em relação ao 1º turno<br>':''}${sub}</span>${sh}</div>`;
+}
+function gchart(t1,t2){
+  const v={l1:has(t1)?t1.l:null,l2:has(t2)?t2.l:null,f1:has(t1)?t1.f:null,f2:has(t2)?t2.f:null};
+  const mx=Math.max(1,...Object.values(v).filter(x=>x!=null));
+  const col=(x,t,ph)=>x==null?`<div class="cb ph"><span>${ph}</span></div>`:`<div class="cb ${t}" style="height:${Math.max(1.5,x/mx*100)}%"><span>${cmp(x)}</span></div>`;
+  const grp=k=>{const [nm,c]=WHO[k];return `<div class="gg" style="--c:${c}"><div class="gb">${col(v[k+'1'],'t1','sem nº')}${col(v[k+'2'],'t2','aguardando')}</div><div class="gx"><span>1º turno</span><span>2º turno</span></div><b class="gn">${nm}</b></div>`;};
+  const lab=k=>`${WHO[k][0]}: 1º turno ${v[k+'1']!=null?fmt(v[k+'1']):'sem número'}, 2º turno ${v[k+'2']!=null?fmt(v[k+'2']):'aguardando'}`;
+  return `<div class="gchart" role="img" aria-label="Votos lado a lado. ${lab('l')}. ${lab('f')}.">${grp('l')}${grp('f')}</div>
+  <div class="gleg"><span><i class="k1"></i>1º turno (cor clara)</span><span><i class="k2"></i>2º turno (cor forte)</span></div>`;
+}
 function compare(t1,t2,opt={}){
   const tg=tags(t1,t2).map(([t,c])=>`<span class="tag" style="--c:${c}">${t}</span>`).join('');
-  const dl=has(t1)&&has(t2)?`<div class="delta"><div style="--c:var(--lula)"><b>${sgn(t2.l-t1.l)}</b><span>votos para Lula</span></div><div style="--c:var(--flavio)"><b>${sgn(t2.f-t1.f)}</b><span>votos para Flávio</span></div></div>`:'';
-  return `<div class="card">${bar('1º turno · 4 de outubro',t1,opt.others)}${votes(t1,'1º turno')}${bar('2º turno · 25 de outubro',t2,false)}${votes(t2,'2º turno')}
-    ${tg?`<div class="tags">${tg}</div>`:''}${dl}
+  return `<div class="card">
+    <h3>Quanto cada um cresceu desde o 1º turno</h3>
+    <div class="growth">${growthTile('l',t1,t2,opt.others)}${growthTile('f',t1,t2,opt.others)}</div>
+    <h3 style="margin-top:6px">1º e 2º turno lado a lado</h3>
+    ${gchart(t1,t2)}
+    ${tg?`<div class="tags">${tg}</div>`:''}
     ${opt.status?`<span class="badge ${opt.status}" title="${LBLX[opt.status]}">${LBL[opt.status]}</span>`:''}${opt.nota?`<p class="note">${esc(opt.nota)}</p>`:''}</div>`;
 }
-function mini(t){ const s=share(t); if(s==null) return `<div class="b w"></div>`; return `<div class="b"><i style="width:${s}%;background:var(--lula)"></i><i style="width:${100-s}%;background:var(--flavio)"></i></div>`; }
+function rowGrowth(t1,t2){
+  const one=k=>{const [nm,c]=WHO[k];
+    if(has(t1)&&has(t2)) return `<span style="--c:${c}"><i></i>${nm} <b>${gp(gr(t1[k],t2[k]))}</b></span>`;
+    if(has(t1)) return `<span style="--c:${c}"><i></i>${nm} <span class="mut">${cmp(t1[k])} no 1º</span></span>`;
+    if(has(t2)) return `<span style="--c:${c}"><i></i>${nm} <span class="mut">${cmp(t2[k])} no 2º</span></span>`;
+    return `<span style="--c:${c}"><i></i>${nm} <span class="mut">—</span></span>`;};
+  return one('l')+one('f');
+}
 function row(href,name,small,t1,t2){
-  const r=read(t1,t2), s1=share(t1), s2=share(t2);
+  const r=read(t1,t2);
   return `<a class="row" href="${href}"><span class="nm">${esc(name)}${small?`<small>${esc(small)}</small>`:''}</span><span class="go" aria-hidden="true">›</span>
-  <span class="mini" aria-label="1º turno ${s1!=null?'Lula '+pc(s1)+'%':'sem dado'}, 2º turno ${s2!=null?'Lula '+pc(s2)+'%':'aguardando'}">${mini(t1)}${mini(t2)}
-  <span class="cap"><span>1º ${s1!=null?pc(s1)+'% Lula':'—'} · 2º ${s2!=null?pc(s2)+'% Lula':'—'}</span><b style="--c:${r.c}">${r.txt}</b></span></span></a>`;
+  <span class="rg">${rowGrowth(t1,t2)}<b class="rd" style="--c:${r.c}">${r.txt}</b></span></a>`;
 }
 
 /* ---------- mapa ---------- */
