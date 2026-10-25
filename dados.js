@@ -61,11 +61,11 @@ window.URNAS = {
         nota: "3º maior eleitorado brasileiro fora do país. 2º turno: soma dos boletins de urna (CNN e Metrópoles).",
         cidades: [
           { id: "nagoia", nome: "Nagoia", t1: { f: 11480, l: 2022 }, t2: { f: 13284, l: 2877 }, status: "aberto", nota: "58 boletins, todos os da jurisdição." },
-          { id: "toquio", nome: "Tóquio", t1: { f: 8423, l: 2328 }, t2: { f: 9770, l: 2995 }, status: "calc", nota: "Calculado: total do Japão menos Nagoia e Hamamatsu." },
+          { id: "toquio", nome: "Tóquio", t1: { f: 8423, l: 2328 }, t2: { f: 9770, l: 2995 }, status: "calc", nota: "Calculado: total do Japão menos Nagoia e Hamamatsu. Atenção: o total do Japão e os números de Nagoia e Hamamatsu vêm de fontes publicadas em horários diferentes, então este número pode estar um pouco torto até o TSE divulgar Tóquio." },
           { id: "hamamatsu", nome: "Hamamatsu", t1: { f: 4698, l: 884 }, t2: { f: 5484, l: 1226 }, status: "aberto", nota: "18 boletins, o mesmo número do 1º turno." } ] },
       { id: "china", nome: "China", cont: "Ásia", status: "aberto",
         t1: { f: 203, l: 367 }, t2: { f: 267, l: 502 },
-        nota: "Inclui Hong Kong. No 1º turno, soma dos boletins divulgados no dia.",
+        nota: "Inclui Hong Kong. Atenção: o 1º turno é a soma dos boletins divulgados no dia, e o 2º vem de outra fonte, que pode não ter as mesmas urnas. Trate a comparação como aproximada.",
         cidades: [
           { id: "continental", nome: "China continental", t1: { f: 98, l: 268 }, t2: { f: 134, l: 375 }, status: "calc", nota: "Pequim, Xangai e Cantão. Calculado: China menos Hong Kong." },
           { id: "hong-kong", nome: "Hong Kong", t1: { f: 105, l: 99 }, t2: { f: 133, l: 127 }, status: "aberto" } ] },

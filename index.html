@@ -85,6 +85,8 @@ p{margin:0}
 .pv.wait{border-radius:50%;border:2px dashed var(--line);background:repeating-linear-gradient(45deg,var(--soft) 0 8px,transparent 8px 16px);display:grid;place-content:center}
 .pv.wait span{font-family:var(--ui);font-weight:700;font-size:14px;color:var(--muted);background:var(--paper);padding:2px 8px;border-radius:999px}
 .pie figcaption{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.warn{font-family:var(--ui);font-size:14px;line-height:1.45;background:var(--part-soft);color:var(--ink);border-left:4px solid var(--part);border-radius:4px;padding:8px 10px}
+.flag{font-family:var(--ui);font-size:12px;font-weight:700;color:var(--part);background:var(--part-soft);border-radius:999px;padding:1px 8px}
 .pdiff{font-family:var(--ui);font-size:15px;text-align:center;color:var(--muted)}
 .pleg{display:flex;flex-wrap:wrap;gap:4px 16px;font-family:var(--ui);font-weight:600;font-size:15px}
 .pleg i{display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:-2px}
@@ -331,8 +333,19 @@ function diffBlock(t1,t2,others){
   }
   return `<div class="diff">${line('1º turno',m1,s1,ex)}${line('2º turno',m2,s2)}</div>${concl}`;
 }
+// --- cuidados de amostra ---
+const SMALL=1000;                       // menos que isso: poucos votos, a % pula muito
+const nVotes=t=>has(t)?t.l+t.f:null;
+const isPartial=t=>!!(t&&t.pst!=null&&t.pst<100);
+function caveats(t1,t2){
+  const out=[], n=Math.min(...[nVotes(t1),nVotes(t2)].filter(x=>x!=null));
+  if(isFinite(n)&&n<SMALL) out.push(`<b>Poucos votos.</b> Aqui ${fmt(n)} pessoas votaram em um dos dois. Cada voto que muda de lado mexe ${pc(200/n)} ponto${200/n>=2?'s':''} na diferença, então mudanças pequenas podem ser só acaso.`);
+  if(isPartial(t2)) out.push(`<b>Apuração em andamento: ${pc(t2.pst)}% das urnas.</b> O 2º turno ainda vai mudar. Os votos de cada um vão continuar subindo, e as primeiras urnas contadas nem sempre parecem com o resultado final.`);
+  return out;
+}
 function growthLine(t1,t2){
   if(!has(t1)||!has(t2)) return '';
+  if(isPartial(t2)) return `<h3>Quanto cada um cresceu em votos</h3><p class="note">Só dá para comparar quando a apuração chegar a 100%. Antes disso os votos do 2º turno ainda estão sendo contados.</p>`;
   const one=k=>{const [nm,c]=WHO[k];return `<div class="gt" style="--c:var(${c})"><span class="who2"><i></i>${nm}</span><b class="gbig">${gp(gr(t1[k],t2[k]))}</b><span class="gsub">votos em relação ao 1º turno<br><b>${fmt(t1[k])}</b> → <b>${fmt(t2[k])}</b> <span class="nowrap">(${sgn(t2[k]-t1[k])})</span></span></div>`;};
   return `<h3>Quanto cada um cresceu em votos</h3><div class="growth">${one('l')}${one('f')}</div>`;
 }
@@ -352,14 +365,23 @@ function pieChart(t,withOthers,label){
   const alt=vals.length===3?`Lula ${pc(vals[0])}%, Flávio ${pc(vals[1])}%, outros ${pc(vals[2])}%`:`Lula ${pc(vals[0])}%, Flávio ${pc(vals[1])}%`;
   return `<figure class="pie"><div class="pv"><canvas id="${id}" role="img" aria-label="${label}: ${alt}"></canvas></div><figcaption>${label}</figcaption></figure>`;
 }
-function pies(t1,t2,t2label){
+// Exterior parcial: compara só os países que já têm os dois turnos (senão a amostra engana)
+function extSame(){
+  const P=D.exterior.paises.filter(p=>has(p.t1)&&has(p.t2));
+  const t1={f:P.reduce((a,p)=>a+p.t1.f,0),l:P.reduce((a,p)=>a+p.t1.l,0)}, t2={f:P.reduce((a,p)=>a+p.t2.f,0),l:P.reduce((a,p)=>a+p.t2.l,0)};
+  return {P,t1,t2,n:P.length,nomes:P.map(p=>p.nome)};
+}
+function exteriorParcial(){ const ex=D.exterior; return !!(ex.t2&&ex.t2.parcial); }
+function pies(t1,t2,t2label,t1label){
   const m1=marg(t1), m2=marg(t2);
-  return `<div class="pies">${pieChart(t1,true,'1º turno')}${pieChart(t2,false,t2label||'2º turno')}</div>
+  return `<div class="pies">${pieChart(t1,true,t1label||'1º turno')}${pieChart(t2,false,t2label||'2º turno')}</div>
   <p class="pdiff">${m1!=null?`1º: <b style="color:${leadC(m1)}">${lead(m1)} +${pc(Math.abs(m1))} pts</b>`:''}${m2!=null?` · 2º: <b style="color:${leadC(m2)}">${lead(m2)} +${pc(Math.abs(m2))} pts</b>`:' · 2º: aguardando'}</p>`;
 }
 function compare(t1,t2,opt={}){
-  const tg=tags(t1,t2).map(([t,c])=>`<span class="tag" style="--c:${c}">${t}</span>`).join('');
+  const tg=tags(t1,t2).filter(([t])=>!(isPartial(t2)&&/votos/.test(t))).map(([t,c])=>`<span class="tag" style="--c:${c}">${t}</span>`).join('');
+  const cv=caveats(t1,t2);
   return `<div class="card">
+    ${cv.map(x=>`<p class="warn">${x}</p>`).join('')}
     <h3>Diferença entre Lula e Flávio</h3>
     ${diffBlock(t1,t2,opt.others)}
     ${diffChart(t1,t2)}
@@ -372,8 +394,10 @@ function compare(t1,t2,opt={}){
 function row(href,name,small,t1,t2){
   const r=read(t1,t2), m1=marg(t1), m2=marg(t2);
   const v=m=>m==null?'<span class="mut">—</span>':`<b style="color:${leadC(m)}">${lead(m)} +${pc(Math.abs(m))}</b>`;
+  const n=Math.min(...[nVotes(t1),nVotes(t2)].filter(x=>x!=null));
+  const flags=(isFinite(n)&&n<SMALL&&m2!=null?'<span class="flag">poucos votos</span>':'')+(isPartial(t2)?`<span class="flag">${pc(t2.pst)}% apurado</span>`:'');
   return `<a class="row" href="${href}"><span class="nm">${esc(name)}${small?`<small>${esc(small)}</small>`:''}</span><span class="go" aria-hidden="true">›</span>
-  <span class="rg"><span>1º ${v(m1)}</span><span>2º ${m2==null?'<span class="mut">aguardando</span>':v(m2)}</span><b class="rd" style="--c:${r.c}">${r.txt}</b></span></a>`;
+  <span class="rg"><span>1º ${v(m1)}</span><span>2º ${m2==null?'<span class="mut">aguardando</span>':v(m2)}</span>${flags}<b class="rd" style="--c:${r.c}">${r.txt}</b></span></a>`;
 }
 
 /* ---------- mapa ---------- */
@@ -416,7 +440,7 @@ const regValid=r=>r.estados.reduce((a,e)=>a+e.t1.f/(e.t1.fp/100),0);
 function home(){
   const b=D.brasil.t1, ex=D.exterior;
   const placesDone=[]; for(const p of ex.paises){ if(share(p.t1)!=null&&share(p.t2)!=null) placesDone.push({h:`#/exterior/${p.id}`,n:p.nome,r:read(p.t1,p.t2)}); }
-  placesDone.sort((a,b)=>Math.abs(b.r.d)-Math.abs(a.r.d));
+  placesDone.forEach(x=>{const p=ex.paises.find(p=>'#/exterior/'+p.id===x.h);x.n2=nVotes(p.t2)||0;}); placesDone.sort((a,b)=>b.n2-a.n2);
   return {crumbs:[], html:`
   <div class="kicker">Rota das Urnas</div>
   <h1>1º turno × 2º turno</h1>
@@ -425,9 +449,9 @@ function home(){
   <div class="pleg"><span style="--c:var(--lula)"><i></i>Lula (PT)</span><span style="--c:var(--flavio)"><i></i>Flávio Bolsonaro (PL)</span><span style="--c:var(--outros)"><i></i>Outros candidatos (só no 1º turno)</span></div>
   <div class="doors">
     <a class="door" href="#/brasil"><span class="t"><b>Brasil</b><span>5 regiões · 27 estados ›</span></span>${pies({l:b.l,f:b.f,lp:b.l/b.validos*100,fp:b.f/b.validos*100},BR())}<p>Toque para ver o mapa e escolher a região ou o estado.</p></a>
-    <a class="door" href="#/exterior"><span class="t"><b>Exterior</b><span>${ex.paises.length} países ›</span></span>${pies(ex.t1,ex.t2,ex.t2&&ex.t2.parcial?'2º turno (parcial)':'2º turno')}<p>Toque para escolher o país e depois a cidade.</p></a>
+    <a class="door" href="#/exterior"><span class="t"><b>Exterior</b><span>${ex.paises.length} países ›</span></span>${exteriorParcial()?(()=>{const S=extSame();return pies(S.t1,S.t2,'2º turno',`1º turno`)+`<p class="warn">Só os ${S.n} países que já têm os dois turnos (${S.nomes.join(', ')}). O Japão pesa mais de 3/4 desses votos. Europa e Américas ainda não foram contadas.</p>`;})():pies(ex.t1,ex.t2,'2º turno')}<p>Toque para escolher o país e depois a cidade.</p></a>
   </div>
-  ${placesDone.length?`<section style="display:grid;gap:10px"><h2>Já dá para comparar</h2><p class="sub">Lugares do exterior com os dois turnos contados, do que mais mexeu para o que menos mexeu.</p><div class="list">${placesDone.slice(0,5).map(x=>{const p=ex.paises.find(p=>'#/exterior/'+p.id===x.h);return row(x.h,x.n,p.cont,p.t1,p.t2)}).join('')}</div><a class="note" href="#/exterior">Ver todos os países ›</a></section>`:''}
+  ${placesDone.length?`<section style="display:grid;gap:10px"><h2>Já dá para comparar</h2><p class="sub">Países do exterior que já têm os dois turnos, do que tem mais votos para o que tem menos. Onde votaram poucas pessoas, a diferença pula muito com poucos votos.</p><div class="list">${placesDone.slice(0,5).map(x=>{const p=ex.paises.find(p=>'#/exterior/'+p.id===x.h);return row(x.h,x.n,p.cont,p.t1,p.t2)}).join('')}</div><a class="note" href="#/exterior">Ver todos os países ›</a></section>`:''}
   <section style="display:grid;gap:10px"><h2>Como comparar sem enganar</h2>
   <p class="sub">No 1º turno havia 13 candidatos, então a porcentagem dos dois sempre sobe no 2º. Por isso cada tela mostra duas contas:</p>
   <div class="how"><div class="card"><h3>A balança entre os dois</h3><p class="note">No 1º turno, contamos só os votos de Lula e Flávio, como se fossem 100%, e comparamos com o 2º. Se mexeu menos de 1 ponto, aparece <b>“manteve”</b>.</p></div>
@@ -468,7 +492,7 @@ function exterior(){
   const done=ex.paises.filter(p=>p.t2).length;
   return {crumbs:[['Exterior']], back:'#/', html:`
   <h2>Exterior</h2>
-  ${compare(ex.t1,ex.t2,{others:true,nota:ex.t2nota})}
+  ${exteriorParcial()?(()=>{const S=extSame();return `<p class="warn">O 2º turno do exterior ainda está pela metade. Para não comparar coisas diferentes, o quadro abaixo usa só os <b>${S.n} países que já têm os dois turnos</b>: ${S.nomes.join(', ')}. No 1º turno, no exterior inteiro, Lula teve ${pc(ex.t1.lp)}% e Flávio ${pc(ex.t1.fp)}%.</p>`+compare(S.t1,S.t2,{nota:'Mesmos países nos dois turnos. '+ex.t2nota});})():compare(ex.t1,ex.t2,{others:true,nota:ex.t2nota})}
   <p class="sub">${done} de ${ex.paises.length} países já têm número do 2º turno. Escolha o país:</p>
   ${conts.map(c=>{const ps=ex.paises.filter(p=>p.cont===c);return `<div class="grp"><span>${c}</span><span>${ps.filter(p=>p.t2).length}/${ps.length} com 2º turno</span></div><div class="list">${ps.map(p=>row(`#/exterior/${p.id}`,p.nome,p.cidades?p.cidades.length+(p.cidades.length>1?' cidades':' cidade'):(p.eleitores?fmt(p.eleitores)+' eleitores':''),p.t1,p.t2)).join('')}</div>`}).join('')}
   <p class="note">A lista traz os maiores eleitorados e os países que já fecharam as urnas. O total oficial de todos os 134 países sai com a totalização do TSE.</p>`};
