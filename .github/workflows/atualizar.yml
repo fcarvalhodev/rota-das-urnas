@@ -1,13 +1,17 @@
 # Busca o resultado do 2º turno no TSE de hora em hora e grava dados-tse.json.
+#
+# O agendamento do GitHub (cron) atrasa e às vezes não dispara. Por isso cada execução fica
+# rodando por até ~5h30, buscando o TSE no minuto 5 de toda hora (UTC), e no fim dispara a
+# próxima execução sozinha. O cron fica só como reserva, caso a corrente se quebre.
 # Quando o TSE chega a 100% apurado (ou depois de 27/10/2026), a Action se desliga sozinha.
-# O site lê dados-tse.json e mostra o contador até a próxima busca.
+# O site lê dados-tse.json e mostra o contador até o próximo minuto 5.
 name: Atualizar apuração (TSE)
 
 on:
   schedule:
-    - cron: "5 * * * *"        # minuto 5 de toda hora (UTC). O site conta até esse horário.
-  workflow_dispatch: {}        # botão "Run workflow" para rodar na hora
-  push:                        # roda também quando o script ou este arquivo mudam (teste na hora)
+    - cron: "5 * * * *"        # reserva
+  workflow_dispatch: {}        # botão "Run workflow" (e a própria Action se redispara por aqui)
+  push:                        # roda quando o script ou este arquivo mudam
     branches: [main]
     paths:
       - "scripts/atualizar_tse.py"
@@ -15,7 +19,7 @@ on:
 
 permissions:
   contents: write              # commit do dados-tse.json
-  actions: write               # desligar a própria Action no fim
+  actions: write               # redisparar e desligar a própria Action
 
 concurrency:
   group: atualizar-tse
@@ -24,36 +28,40 @@ concurrency:
 jobs:
   atualizar:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 350
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Já terminou?
-        id: antes
-        run: |
-          fim=$(python3 -c "import json;print('true' if json.load(open('dados-tse.json')).get('final') else 'false')" 2>/dev/null || echo false)
-          hoje=$(date -u +%Y%m%d)
-          if [ "$fim" = "true" ] || [ "$hoje" -gt 20261027 ]; then echo "parar=true" >> "$GITHUB_OUTPUT"; else echo "parar=false" >> "$GITHUB_OUTPUT"; fi
-
-      - name: Buscar no TSE
-        id: tse
-        if: steps.antes.outputs.parar == 'false'
-        run: python3 scripts/atualizar_tse.py --saida dados-tse.json
-
-      - name: Salvar
-        if: steps.antes.outputs.parar == 'false'
+      - name: Buscar no TSE de hora em hora
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dados-tse.json
-          if git diff --cached --quiet; then echo "nada mudou"; exit 0; fi
-          git commit -m "Apuração TSE: $(python3 -c "import json;d=json.load(open('dados-tse.json'));b=d.get('brasil') or {};print(str(b.get('pst','sem dados'))+'% apurado')")"
-          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done
+          fim_da_janela=$((SECONDS + 330*60))          # ~5h30 por execução
+          desligar() { gh workflow disable atualizar.yml --repo "$REPO" && echo "Apuração encerrada, Action desligada."; exit 0; }
 
-      - name: Desligar a Action
-        if: steps.antes.outputs.parar == 'true' || steps.tse.outputs.final == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh workflow disable atualizar.yml --repo "${{ github.repository }}"
-          echo "Apuração encerrada, Action desligada."
+          while true; do
+            git pull --rebase -q || true
+            if [ "$(date -u +%Y%m%d)" -gt 20261027 ]; then desligar; fi
+            if python3 -c "import json,sys;sys.exit(0 if json.load(open('dados-tse.json')).get('final') else 1)"; then desligar; fi
+
+            python3 scripts/atualizar_tse.py --saida dados-tse.json || echo "falha ao buscar no TSE; tenta de novo na próxima hora"
+            git add dados-tse.json
+            if ! git diff --cached --quiet; then
+              msg=$(python3 -c "import json;d=json.load(open('dados-tse.json'));b=d.get('brasil') or {};print(str(b.get('pst','sem dados'))+'% apurado')")
+              git commit -q -m "Apuração TSE: $msg"
+              for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
+            fi
+            if python3 -c "import json,sys;sys.exit(0 if json.load(open('dados-tse.json')).get('final') else 1)"; then desligar; fi
+
+            # espera até o próximo minuto 5 (UTC), o mesmo horário que o contador do site mostra
+            agora=$(date -u +%s); prox=$(( (agora/3600)*3600 + 300 )); [ "$prox" -le "$agora" ] && prox=$((prox+3600))
+            espera=$((prox - agora))
+            if [ $((SECONDS + espera)) -gt $fim_da_janela ]; then break; fi
+            echo "próxima busca às $(date -u -d @$prox +%H:%M) UTC"; sleep "$espera"
+          done
+
+          echo "Fim da janela de 5h30: disparando a próxima execução."
+          gh workflow run atualizar.yml --repo "$REPO" --ref main
