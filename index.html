@@ -57,6 +57,15 @@ p{margin:0}
 .who{display:flex;flex-wrap:wrap;gap:4px 14px;font-family:var(--ui);font-weight:600;font-size:14px;margin-left:auto}
 .who i{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--c);margin-right:5px;vertical-align:-1px}
 
+.tick{border-top:1px solid var(--line);background:var(--paper)}
+.tick .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px;min-height:38px;padding-block:5px;font-family:var(--ui);font-size:14px;font-weight:600}
+.tk-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none}
+.tick.busy .tk-dot{animation:pulse 1s infinite}
+.tick.done .tk-dot{background:var(--ok)}
+.tick #tk-main b{font-family:var(--mono);font-size:15px}
+.tk-sub{color:var(--muted);font-weight:500;font-size:13px}
+@media (prefers-reduced-motion:reduce){.tick.busy .tk-dot{animation:none}}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-family:var(--ui);font-weight:700;font-size:15px;padding:10px 16px;border-radius:999px;z-index:9;box-shadow:0 6px 20px rgba(0,0,0,.25)}
 /* telas */
 #view{padding-block:28px 40px;display:grid;grid-template-columns:minmax(0,1fr);gap:22px;min-height:70vh}
 #view.enter{animation:in .28s ease-out}
@@ -189,7 +198,9 @@ footer{padding-block:20px 60px;color:var(--muted);font-size:14px;display:grid;ga
   <a class="back" id="back" href="#/" hidden><span aria-hidden="true">←</span> Voltar</a>
   <nav class="crumbs" id="crumbs" aria-label="Você está em"></nav>
   <div class="who" aria-hidden="true"><span style="--c:var(--lula)"><i></i>Lula</span><span style="--c:var(--flavio)"><i></i>Flávio</span></div>
-</div></div>
+</div>
+<div class="tick" id="tick" role="status" aria-live="off"><div class="wrap"><span class="tk-dot" aria-hidden="true"></span><span id="tk-main">Carregando dados do TSE…</span><span id="tk-sub" class="tk-sub"></span></div></div>
+</div>
 
 <main class="wrap" id="view" tabindex="-1" aria-live="polite"></main>
 
@@ -428,6 +439,7 @@ function mapBlock(focus){
     <div class="tmap" id="tmap">${tmap(focus)}</div>
     <div class="scale" id="scale">${scaleTxt()}</div>
     ${!any2&&mapMode!=='t1'?'<p class="note">Os estados ficam listrados até o TSE divulgar o 2º turno, a partir das 17h de Brasília.</p>':''}
+    ${D.regioes.some(r=>r.estados.some(e=>isPartial(e.t2)))?'<p class="warn">Apuração em andamento: alguns estados ainda não chegaram a 100%. A cor do 2º turno e do “O que mudou” ainda pode mudar.</p>':''}
     <p class="note">Toque em um estado para ver os números dele. L = % de Lula, F = % de Flávio, contando só os dois.</p></div>`;
 }
 function scaleTxt(){ return mapMode==='mud'?'<span style="color:var(--flavio)">■ pendeu para Flávio</span> <span>■ manteve</span> <span style="color:var(--lula)">■ pendeu para Lula</span>':'<span style="color:var(--flavio)">■ Flávio na frente</span><span style="color:var(--lula)">■ Lula na frente</span><span>· cor mais forte = vantagem maior</span>'; }
@@ -448,7 +460,7 @@ function home(){
   <div class="live" role="status"><span class="dot" aria-hidden="true"></span><span>${esc(D.aviso)}</span></div>
   <div class="pleg"><span style="--c:var(--lula)"><i></i>Lula (PT)</span><span style="--c:var(--flavio)"><i></i>Flávio Bolsonaro (PL)</span><span style="--c:var(--outros)"><i></i>Outros candidatos (só no 1º turno)</span></div>
   <div class="doors">
-    <a class="door" href="#/brasil"><span class="t"><b>Brasil</b><span>5 regiões · 27 estados ›</span></span>${pies({l:b.l,f:b.f,lp:b.l/b.validos*100,fp:b.f/b.validos*100},BR())}<p>Toque para ver o mapa e escolher a região ou o estado.</p></a>
+    <a class="door" href="#/brasil"><span class="t"><b>Brasil</b><span>5 regiões · 27 estados ›</span></span>${pies({l:b.l,f:b.f,lp:b.l/b.validos*100,fp:b.f/b.validos*100},BR())}${isPartial(BR())?`<p class="warn">Apuração em andamento: ${pc(BR().pst)}% das urnas. A pizza do 2º turno ainda vai mudar.</p>`:''}<p>Toque para ver o mapa e escolher a região ou o estado.</p></a>
     <a class="door" href="#/exterior"><span class="t"><b>Exterior</b><span>${ex.paises.length} países ›</span></span>${exteriorParcial()?(()=>{const S=extSame();return pies(S.t1,S.t2,'2º turno',`1º turno`)+`<p class="warn">Só os ${S.n} países que já têm os dois turnos (${S.nomes.join(', ')}). O Japão pesa mais de 3/4 desses votos. Europa e Américas ainda não foram contadas.</p>`;})():pies(ex.t1,ex.t2,'2º turno')}<p>Toque para escolher o país e depois a cidade.</p></a>
   </div>
   ${placesDone.length?`<section style="display:grid;gap:10px"><h2>Já dá para comparar</h2><p class="sub">Países do exterior que já têm os dois turnos, do que tem mais votos para o que tem menos. Onde votaram poucas pessoas, a diferença pula muito com poucos votos.</p><div class="list">${placesDone.slice(0,5).map(x=>{const p=ex.paises.find(p=>'#/exterior/'+p.id===x.h);return row(x.h,x.n,p.cont,p.t1,p.t2)}).join('')}</div><a class="note" href="#/exterior">Ver todos os países ›</a></section>`:''}
@@ -523,7 +535,7 @@ function fontes(){
 function nf(){ return {crumbs:[['Não encontrado']], back:'#/', html:`<h2>Não achei esta página</h2><p><a href="#/">Voltar ao início</a></p>`}; }
 
 /* ---------- roteador ---------- */
-function route(){
+function route(keep){
   const parts=(location.hash.replace(/^#\/?/,'')||'').split('/').filter(Boolean).map(decodeURIComponent);
   let v;
   if(!parts.length) v=home();
@@ -542,17 +554,72 @@ function route(){
   cr.innerHTML=all.map((c,i)=>i===all.length-1?`<span aria-current="page">${esc(c[0])}</span>`:`<a href="${c[1]}">${esc(c[0])}</a>`).join('<i aria-hidden="true">›</i>');
   const bk=document.getElementById('back'); if(v.back){bk.hidden=false;bk.href=v.back;} else bk.hidden=true;
   const last=all[all.length-1][0]; document.title=(all.length>1?last+' · ':'')+'Rota das Urnas';
-  window.scrollTo(0,0);
-  if(route.ran){ const h=V.querySelector('h2,h1'); if(h){h.tabIndex=-1;h.focus({preventScroll:true});} }
+  if(!keep) window.scrollTo(0,0);
+  if(route.ran&&!keep){ const h=V.querySelector('h2,h1'); if(h){h.tabIndex=-1;h.focus({preventScroll:true});} }
   route.ran=true;
 }
 V.addEventListener('click',e=>{ const b=e.target.closest('.seg button'); if(!b) return;
   mapMode=b.dataset.m; V.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
   const m=location.hash.split('/')[2]; const focus=location.hash.startsWith('#/brasil/')&&m?m:null;
   document.getElementById('tmap').innerHTML=tmap(focus); document.getElementById('scale').innerHTML=scaleTxt(); });
-window.addEventListener('hashchange',route);
+window.addEventListener('hashchange',()=>route());
 document.getElementById('upd').textContent='Atualizado em '+D.atualizado+'.';
 route();
+
+/* ---------- dados do TSE (GitHub Action de hora em hora) ---------- */
+const REPO_RAW='https://raw.githubusercontent.com/fcarvalhodev/rota-das-urnas/main/dados-tse.json';
+const CRON_MIN=5;                  // a Action roda no minuto 5 de toda hora (UTC)
+let T=null;
+async function getTSE(){
+  for(const u of [REPO_RAW+'?t='+Date.now(),'dados-tse.json?t='+Date.now()]){
+    try{ const r=await fetch(u,{cache:'no-store'}); if(r.ok){ const j=await r.json(); if(j&&'brasil' in j) return j; } }catch(e){}
+  }
+  return null;
+}
+function mergeTSE(j){
+  if(!j) return;
+  const st=p=>p!=null&&p>=100?'doc':'aberto';
+  if(j.brasil&&j.brasil.l!=null) D.brasil.t2={l:j.brasil.l,f:j.brasil.f,pst:j.brasil.pst};
+  for(const r of D.regioes){
+    for(const e of r.estados){ const x=(j.estados||{})[e.uf]; if(x&&x.l!=null){ e.t2={l:x.l,f:x.f,pst:x.pst}; e.status=st(x.pst); } }
+    if(r.estados.every(e=>has(e.t2))){ const t=sum(r.estados,'t2'); const ps=r.estados.map(e=>e.t2.pst).filter(x=>x!=null); if(ps.length) t.pst=Math.min(...ps); r.t2=t; }
+  }
+  if(j.exterior&&j.exterior.l!=null){ D.exterior.t2={l:j.exterior.l,f:j.exterior.f,pst:j.exterior.pst}; D.exterior.t2nota='Total do exterior, direto do TSE.'; }
+  const b=j.brasil;
+  if(j.final) D.aviso='Apuração encerrada: o TSE chegou a 100% das urnas. Os números do Brasil, dos estados e do exterior são os oficiais.';
+  else if(b&&b.pst!=null) D.aviso=`TSE: ${pc(b.pst)}% das urnas apuradas no Brasil${b.tse?' (dados das '+b.tse.split(' ')[1].slice(0,5)+' de Brasília)':''}. O resultado ainda vai mudar até chegar a 100%.`;
+}
+function nextRun(now=new Date()){
+  const n=new Date(now); n.setUTCMinutes(CRON_MIN,0,0); if(n<=now) n.setUTCHours(n.getUTCHours()+1); return n;
+}
+const hm=d=>d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+let busy=false, waitUntil=0;
+function tick(){
+  const el=document.getElementById('tick'), m=document.getElementById('tk-main'), sb=document.getElementById('tk-sub');
+  if(T&&T.final){ el.className='tick done'; m.innerHTML='Apuração encerrada: 100% das urnas'; sb.textContent='A atualização automática foi desligada.'; return; }
+  const now=new Date();
+  if(busy){ el.className='tick busy'; m.innerHTML='Buscando dados novos do TSE…'; }
+  else { const t=nextRun(now), s=Math.max(0,Math.round((t-now)/1000));
+    el.className='tick'; m.innerHTML=`Próxima atualização em <b>${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}</b>`;
+    sb.textContent=`por volta das ${hm(t)} (seu horário)`+(T&&T.verificado?` · última busca no TSE às ${hm(new Date(T.verificado))}`:'')+(T&&T.brasil&&T.brasil.pst!=null?` · ${pc(T.brasil.pst)}% apurado`:''); }
+}
+function toast(txt){ const t=document.createElement('div'); t.className='toast'; t.textContent=txt; document.body.appendChild(t); setTimeout(()=>t.remove(),4000); }
+async function refresh(silent){
+  const j=await getTSE(); if(!j) return false;
+  const changed=!T||j.verificado!==T.verificado;
+  if(changed){ T=j; mergeTSE(j); if(j.brasil||j.exterior){ route(true); if(!silent&&j.mudou_em===j.verificado) toast('Números atualizados com o TSE'); } }
+  return changed;
+}
+// ao zerar o contador, a Action do GitHub costuma levar alguns minutos para rodar: tenta a cada 60 s por até 20 min
+async function onZero(){
+  if(busy) return; busy=true; waitUntil=Date.now()+20*60e3; tick();
+  while(Date.now()<waitUntil){ if(await refresh(false)) break; await new Promise(r=>setTimeout(r,60e3)); }
+  busy=false; tick();
+}
+let lastNext=nextRun().getTime();
+setInterval(()=>{ const n=nextRun().getTime(); if(n!==lastNext){ lastNext=n; onZero(); } tick(); },1000);
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) refresh(true); });
+refresh(true).then(tick);
 })();
 </script>
 </body></html>
