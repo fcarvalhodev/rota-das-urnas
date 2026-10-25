@@ -2,18 +2,18 @@
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Rota das Urnas</title>
-<meta name="description" content="1º turno × 2º turno da eleição para presidente de 2026: o que mudou, o que ficou igual, região por região e país por país, com os números do TSE.">
+<meta name="description" content="1º turno × 2º turno da eleição para presidente de 2026: clique no Brasil ou no exterior, escolha a região, o estado, o país ou a cidade e veja o que mudou.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>
-/* Layout: o esqueleto das Rotas no formato fácil. Cor própria da rota: verde-cinza da urna.
-   Os dois candidatos usam cores neutras (nem vermelho nem verde-amarelo), as mesmas em todo o site.
-   Ordem: pergunta → resposta curta → como comparar → votos em disputa → regiões → exterior → Japão → resumo → números. */
+/* Rota das Urnas: o esqueleto das Rotas, em formato de navegação.
+   Qualquer número em até 3 cliques: Início → Brasil → estado; Início → Exterior → país → cidade.
+   Os dois candidatos usam cores neutras (roxo e azul-petróleo), as mesmas no site inteiro. */
 :root{
   --bg:#eef0ee; --paper:#fbfcfb; --ink:#1b1f1c; --muted:#59605b; --line:#d2d8d3; --soft:#e3e8e4;
   --accent:#3c5a48; --accent-soft:#dce8e0;
   --lula:#6d3fc7; --flavio:#0d7f86; --outros:#9a9fa0;
-  --ok:#1f6b45; --ok-soft:#dcefe3; --no:#a12a2a; --no-soft:#f6dede; --part:#7a5a00; --part-soft:#f6ebc9;
+  --ok:#1f6b45; --ok-soft:#dcefe3; --no:#a12a2a; --no-soft:#f6dede; --part:#7a5a00; --part-soft:#f6ebc9; --calc:#4a5a8a; --calc-soft:#e1e6f3;
   --display:"Archivo","Arial Narrow",Impact,sans-serif;
   --ui:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
   --text:"Source Serif 4",Georgia,"Times New Roman",serif;
@@ -23,265 +23,347 @@
   --bg:#111412; --paper:#181c19; --ink:#e7ece8; --muted:#9fa8a2; --line:#2b322d; --soft:#222824;
   --accent:#8cc4a2; --accent-soft:#1b2a21;
   --lula:#a98bf0; --flavio:#3fbfc6; --outros:#6f7573;
-  --ok:#7fd3a3; --ok-soft:#173326; --no:#f19b9b; --no-soft:#3a1c1c; --part:#e8c25a; --part-soft:#3a3016; color-scheme:dark}}
+  --ok:#7fd3a3; --ok-soft:#173326; --no:#f19b9b; --no-soft:#3a1c1c; --part:#e8c25a; --part-soft:#3a3016; --calc:#a9b8e6; --calc-soft:#1f2538; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111412; --paper:#181c19; --ink:#e7ece8; --muted:#9fa8a2; --line:#2b322d; --soft:#222824;
   --accent:#8cc4a2; --accent-soft:#1b2a21;
   --lula:#a98bf0; --flavio:#3fbfc6; --outros:#6f7573;
-  --ok:#7fd3a3; --ok-soft:#173326; --no:#f19b9b; --no-soft:#3a1c1c; --part:#e8c25a; --part-soft:#3a3016; color-scheme:dark}
+  --ok:#7fd3a3; --ok-soft:#173326; --no:#f19b9b; --no-soft:#3a1c1c; --part:#e8c25a; --part-soft:#3a3016; --calc:#a9b8e6; --calc-soft:#1f2538; color-scheme:dark}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--text);font-size:19px;line-height:1.7}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--text);font-size:19px;line-height:1.6}
 a{color:inherit;text-decoration-color:var(--accent);text-underline-offset:3px}
-a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .wrap{max-width:880px;margin:0 auto;padding-inline:16px}
-.kicker,.mono{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.kicker{color:var(--accent)}
-h1{font-family:var(--display);font-stretch:62%;font-weight:900;font-size:clamp(46px,11vw,104px);line-height:.9;margin:0;text-transform:uppercase;overflow-wrap:anywhere}
-h2{font-family:var(--display);font-stretch:66%;font-weight:800;font-size:clamp(34px,7vw,52px);line-height:.95;margin:0;text-transform:uppercase;text-wrap:balance}
-h3{font-family:var(--ui);font-weight:700;font-size:22px;line-height:1.2;margin:0;text-wrap:balance}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1,h2{font-family:var(--display);font-weight:900;text-transform:uppercase;margin:0;overflow-wrap:anywhere;text-wrap:balance}
+h1{font-stretch:62%;font-size:clamp(46px,11vw,96px);line-height:.9}
+h2{font-stretch:66%;font-weight:800;font-size:clamp(32px,7vw,48px);line-height:.95}
+h3{font-family:var(--ui);font-weight:700;font-size:21px;line-height:1.2;margin:0}
 p{margin:0}
-header,section{display:grid;grid-template-columns:minmax(0,1fr)}
-header{padding-block:40px 8px;gap:18px}
-section{padding-block:48px 8px;gap:18px}
-.lg{font-size:21px;line-height:1.6}
-.sub{color:var(--muted);max-width:62ch}
-.src{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 14px;line-height:1.5}
-.src a{color:var(--muted)}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:20px;display:grid;gap:12px;align-content:start}
-.answer-box{background:var(--accent-soft);border:2px solid var(--accent);border-radius:6px;padding:20px;margin-top:40px}
-.live{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-family:var(--ui);font-size:16px;font-weight:600;background:var(--paper);border:1px dashed var(--accent);border-radius:6px;padding:10px 14px}
-.live .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
+.lg{font-size:21px;line-height:1.55}
+.sub{color:var(--muted)}
+.note{font-size:15px;color:var(--muted);line-height:1.5}
+
+/* topo fixo: trilha + voltar */
+.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:10px;min-height:52px;flex-wrap:wrap;padding-block:6px}
+.back{font-family:var(--ui);font-weight:700;font-size:16px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;text-decoration:none;display:inline-flex;gap:6px;align-items:center}
+.crumbs{display:flex;flex-wrap:wrap;gap:2px 6px;align-items:center;font-family:var(--ui);font-size:15px;font-weight:600;min-width:0}
+.crumbs a{color:var(--muted);text-decoration:none}
+.crumbs a:hover{color:var(--ink);text-decoration:underline}
+.crumbs span[aria-current]{color:var(--ink)}
+.crumbs i{color:var(--line);font-style:normal}
+.who{display:flex;flex-wrap:wrap;gap:4px 14px;font-family:var(--ui);font-weight:600;font-size:14px;margin-left:auto}
+.who i{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--c);margin-right:5px;vertical-align:-1px}
+
+/* telas */
+#view{padding-block:28px 40px;display:grid;grid-template-columns:minmax(0,1fr);gap:22px;min-height:70vh}
+#view.enter{animation:in .28s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#view.enter{animation:none}}
+.live{display:flex;gap:10px;align-items:flex-start;font-family:var(--ui);font-size:15px;font-weight:600;background:var(--paper);border:1px dashed var(--accent);border-radius:6px;padding:10px 14px;line-height:1.45}
+.live .dot{flex:none;width:10px;height:10px;margin-top:5px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
 @keyframes pulse{50%{opacity:.25}}
 @media (prefers-reduced-motion:reduce){.live .dot{animation:none}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px;display:grid;gap:12px;align-content:start}
 
-/* legenda dos candidatos */
-.who{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--ui);font-weight:600;font-size:16px}
-.who i{display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--c);margin-right:6px;vertical-align:-2px}
+/* portas da tela inicial */
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}
+.door{display:grid;gap:10px;text-decoration:none;background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:18px;transition:transform .15s,box-shadow .15s}
+.door:hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--ink)}
+.door .t{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.door .t b{font-family:var(--display);font-stretch:66%;font-weight:900;font-size:44px;line-height:.9;text-transform:uppercase}
+.door .t span{font-family:var(--ui);font-weight:800;font-size:16px;color:var(--accent)}
+.door p{font-size:16px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.door{transition:none}.door:hover{transform:none}}
 
-/* barra dividida */
-.split{display:grid;gap:4px}
+/* barras */
+.split{display:grid;gap:3px}
 .split .lab{display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.bar{display:flex;height:30px;border-radius:3px;overflow:hidden;background:var(--soft)}
-.bar span{display:flex;align-items:center;padding-inline:8px;color:#fff;font-family:var(--mono);font-weight:600;font-size:13px;white-space:nowrap;min-width:0;overflow:hidden}
+.bar{display:flex;height:32px;border-radius:4px;overflow:hidden;background:var(--soft)}
+.bar span{display:flex;align-items:center;padding-inline:8px;color:#fff;font-family:var(--mono);font-weight:600;font-size:13px;white-space:nowrap;min-width:0;overflow:hidden;transition:width .5s ease}
 .bar .l{background:var(--lula)} .bar .f{background:var(--flavio);justify-content:flex-end} .bar .o{background:var(--outros);justify-content:center}
 .bar.wait{background:repeating-linear-gradient(45deg,var(--soft) 0 10px,transparent 10px 20px);border:1px dashed var(--line);justify-content:center;align-items:center;font-family:var(--ui);font-size:14px;font-weight:600;color:var(--muted)}
-
-/* grade de regiões / lugares */
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:12px}
-.place h3{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
-.place h3 small{font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
 .tag{font-family:var(--ui);font-weight:700;font-size:14px;padding:3px 10px;border-radius:999px;border:2px solid var(--c);color:var(--c);background:var(--paper)}
 .delta{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.delta div{background:var(--soft);border-radius:4px;padding:8px 10px;display:grid;gap:0}
-.delta b{font-family:var(--display);font-stretch:66%;font-weight:800;font-size:28px;line-height:1.1;color:var(--c)}
+.delta div{background:var(--soft);border-radius:6px;padding:10px 12px;display:grid}
+.delta b{font-family:var(--display);font-stretch:66%;font-weight:800;font-size:34px;line-height:1.05;color:var(--c)}
 .delta span{font-family:var(--ui);font-size:14px;color:var(--muted)}
-.note{font-size:15px;color:var(--muted);line-height:1.5}
-.badge{justify-self:start;font-family:var(--ui);font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:999px}
-.badge.doc{background:var(--ok-soft);color:var(--ok);border:2px solid var(--ok)}
-.badge.aberto{background:var(--part-soft);color:var(--part);border:2px solid var(--part)}
-.badge.alegacao{background:var(--no-soft);color:var(--no);border:2px solid var(--no)}
+.badge{justify-self:start;font-family:var(--ui);font-weight:800;font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:2px 9px;border-radius:999px;border:2px solid var(--c);color:var(--c);background:var(--s)}
+.badge.doc{--c:var(--ok);--s:var(--ok-soft)} .badge.aberto{--c:var(--part);--s:var(--part-soft)} .badge.alegacao{--c:var(--no);--s:var(--no-soft)} .badge.calc{--c:var(--calc);--s:var(--calc-soft)}
 
-/* votos em disputa */
-.pool{display:grid;gap:8px}
+/* listas clicáveis */
+.list{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;align-items:center;text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px;transition:border-color .15s,background .15s}
+.row:hover{border-color:var(--ink);background:color-mix(in srgb,var(--paper) 85%,var(--accent-soft))}
+.row .nm{font-family:var(--ui);font-weight:700;font-size:18px;line-height:1.2}
+.row .nm small{display:block;font-weight:500;font-size:13px;color:var(--muted)}
+.row .go{font-family:var(--ui);font-weight:800;font-size:22px;color:var(--muted);grid-row:span 2}
+.row .mini{display:grid;gap:3px;grid-column:1}
+.mini .b{display:flex;height:9px;border-radius:2px;overflow:hidden;background:var(--soft)}
+.mini .b i{display:block;height:100%}
+.mini .b.w{background:repeating-linear-gradient(45deg,var(--soft) 0 5px,transparent 5px 10px);outline:1px dashed var(--line)}
+.mini .cap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 8px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.03em}
+.mini .cap b{font-family:var(--ui);font-size:12px;font-weight:800;letter-spacing:0;color:var(--c,var(--muted))}
+.grp{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:10px;display:flex;justify-content:space-between;gap:8px}
+
+/* mapa de quadradinhos */
+.mapbox{display:grid;gap:12px}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;justify-self:start;flex-wrap:wrap}
+.seg button{font-family:var(--ui);font-weight:700;font-size:15px;border:0;background:var(--paper);color:var(--ink);padding:7px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.tmap{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;max-width:440px;width:100%}
+.tile{aspect-ratio:1;border-radius:6px;display:grid;place-content:center;text-align:center;text-decoration:none;color:#fff;background:var(--bgc,var(--soft));font-family:var(--ui);font-weight:800;font-size:clamp(12px,3.4vw,16px);line-height:1.05;transition:transform .12s,background .4s,opacity .3s;border:2px solid transparent}
+.tile small{display:block;font-family:var(--mono);font-weight:600;font-size:clamp(9px,2.4vw,11px);opacity:.92}
+.tile:hover{transform:scale(1.08);border-color:var(--ink);z-index:1}
+.tile.wait{background:repeating-linear-gradient(45deg,var(--soft) 0 6px,var(--paper) 6px 12px);color:var(--muted);border:1px dashed var(--line)}
+.tile.dim{opacity:.22}
+.scale{display:flex;align-items:center;gap:8px;font-family:var(--ui);font-size:13px;font-weight:600;color:var(--muted);flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){.tile,.bar span{transition:none}.tile:hover{transform:none}}
+
+.cols{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+@media (min-width:820px){.cols.two{grid-template-columns:440px minmax(0,1fr);align-items:start}}
+
+.big{font-family:var(--display);font-stretch:62%;font-weight:900;font-size:clamp(52px,12vw,84px);line-height:.9;color:var(--accent)}
+.pool{display:grid;gap:7px}
 .pool .r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center}
-.pool .r .t{grid-column:1/-1;height:16px;background:var(--soft);border-radius:3px;overflow:hidden}
+.pool .r .t{grid-column:1/-1;height:12px;background:var(--soft);border-radius:3px;overflow:hidden}
 .pool .r .t i{display:block;height:100%;background:var(--outros)}
-.pool .r b{font-family:var(--ui);font-size:17px} .pool .r span{font-family:var(--mono);font-size:14px;color:var(--muted)}
-.big{font-family:var(--display);font-stretch:62%;font-weight:900;font-size:clamp(56px,12vw,88px);line-height:.9;color:var(--accent)}
-
-.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
-.how .card .n{font-family:var(--display);font-stretch:62%;font-weight:900;font-size:44px;line-height:.9;color:var(--accent)}
-
-.verdict{background:var(--ink);color:var(--paper);border-radius:6px;padding:22px 20px;display:grid;gap:12px}
-.verdict h2{color:var(--paper)}
-.verdict ul{margin:0;padding-left:20px;display:grid;gap:8px;font-size:20px}
-details.mais{margin-top:44px;border:2px solid var(--line);border-radius:6px;background:var(--paper)}
-details.mais>summary{cursor:pointer;padding:18px 20px;font-family:var(--ui);font-weight:700;font-size:19px;list-style:none;display:flex;justify-content:space-between;gap:12px}
-details.mais>summary::after{content:"+";font-family:var(--mono);font-size:24px;line-height:1}
-details.mais[open]>summary::after{content:"−"}
-details.mais>summary::-webkit-details-marker{display:none}
-.mais-body{padding:0 20px 20px;font-size:17px;line-height:1.6;display:grid;gap:14px;overflow-x:auto}
-.mais-body table{width:100%;border-collapse:collapse;font-size:15px}
-.mais-body th,.mais-body td{text-align:left;padding:8px 6px;border-top:1px solid var(--line);vertical-align:top}
-.mais-body th{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
-.mais-body td.n{font-family:var(--mono);white-space:nowrap;text-align:right}
-footer{padding-block:44px 60px;color:var(--muted);font-size:14px;display:grid;gap:8px}
+.pool .r b{font-family:var(--ui);font-size:16px} .pool .r span{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px}
+.src{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px;line-height:1.5}
+.src a{color:var(--muted)}
+footer{padding-block:20px 60px;color:var(--muted);font-size:14px;display:grid;gap:6px;border-top:1px solid var(--line)}
 </style>
 </head><body>
 
 <style>/* barra comum das Rotas */.rotas-bar{border-bottom:1px solid var(--line);background:var(--bg);font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase}.rotas-bar>div{max-width:880px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px}.rotas-bar a{color:var(--muted);text-decoration:none;padding-block:2px;border-bottom:2px solid transparent}.rotas-bar a:hover{color:var(--ink)}.rotas-bar a[aria-current]{color:var(--ink);border-bottom-color:var(--accent)}.rotas-bar .rb-home{color:var(--accent);font-weight:600}.rotas-bar a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}</style><nav class="rotas-bar" aria-label="Rotas"><div><a class="rb-home" href="https://fcarvalhodev.github.io/rotas/">Rotas</a><a href="https://fcarvalhodev.github.io/rota-das-urnas/" aria-current="page">Urnas</a><a href="https://fcarvalhodev.github.io/rota-washington/">Washington</a><a href="https://fcarvalhodev.github.io/rota-master/">Master</a><a href="https://fcarvalhodev.github.io/rota-curitiba/">Curitiba</a><a href="https://fcarvalhodev.github.io/rota-da-fe/">Fé</a><a href="https://fcarvalhodev.github.io/rota-esplanada/">Esplanada</a><a href="https://fcarvalhodev.github.io/rota-itamaraty/">Itamaraty</a><a href="https://fcarvalhodev.github.io/rota-da-picanha/">Picanha</a><a href="https://fcarvalhodev.github.io/rota-do-ibge/">IBGE</a><a href="https://fcarvalhodev.github.io/rota-velho-chico/">Velho Chico</a><a href="https://fcarvalhodev.github.io/rota-do-tesouro/">Tesouro</a><a href="https://fcarvalhodev.github.io/rota-rouanet/">Rouanet</a><a href="https://fcarvalhodev.github.io/rota-dos-ventos/">Ventos</a><a href="https://fcarvalhodev.github.io/rota-do-algoritmo/">Algoritmo</a><a href="https://fcarvalhodev.github.io/rota-do-posto/">Posto</a><a href="https://fcarvalhodev.github.io/rota-das-queimadas/">Queimadas</a><a href="https://fcarvalhodev.github.io/rota-dos-games/">Games</a><a href="https://fcarvalhodev.github.io/rota-do-contracheque/">Contracheque</a><a href="https://fcarvalhodev.github.io/rota-palantir/">Palantir</a></div></nav>
 
-<header class="wrap">
-  <div class="kicker">Rota das Urnas</div>
-  <h1>1º turno × 2º turno</h1>
-  <p class="lg">Em 4 de outubro, Flávio Bolsonaro (PL) ficou em primeiro e Lula (PT) em segundo. Hoje os dois se enfrentam de novo. Aqui você vê, lugar por lugar, o que mudou e o que ficou igual.</p>
-  <div class="live" role="status"><span class="dot" aria-hidden="true"></span><span>Até agora só há urnas do exterior. O TSE divulga o Brasil a partir das <b>17h de Brasília</b> (5h de segunda no Japão).</span></div>
-  <div class="who"><span style="--c:var(--lula)"><i></i>Lula (PT)</span><span style="--c:var(--flavio)"><i></i>Flávio Bolsonaro (PL)</span><span style="--c:var(--outros)"><i></i>Outros candidatos (só no 1º turno)</span></div>
-</header>
+<div class="top"><div class="wrap">
+  <a class="back" id="back" href="#/" hidden><span aria-hidden="true">←</span> Voltar</a>
+  <nav class="crumbs" id="crumbs" aria-label="Você está em"></nav>
+  <div class="who" aria-hidden="true"><span style="--c:var(--lula)"><i></i>Lula</span><span style="--c:var(--flavio)"><i></i>Flávio</span></div>
+</div></div>
 
-<main class="wrap">
+<main class="wrap" id="view" tabindex="-1" aria-live="polite"></main>
 
-<section class="answer-box" aria-labelledby="h-curta">
-  <h2 id="h-curta">A resposta curta (por enquanto)</h2>
-  <p class="lg">Nos lugares do exterior que já contaram os votos, <b>ninguém virou</b>: quem ganhou no 1º turno continua na frente. <b>Os dois candidatos ganharam votos</b> em quase todo lugar, porque agora não há outros nomes na urna. A balança mexeu pouco, no máximo uns 3 pontos, às vezes para um lado, às vezes para o outro.</p>
-</section>
-
-<section aria-labelledby="h-como">
-  <h2 id="h-como">Como comparar sem enganar</h2>
-  <p class="sub lg">No 1º turno havia 13 candidatos. No 2º, só dois. Por isso a porcentagem de cada um sempre sobe, e isso sozinho não quer dizer nada. A página usa duas contas mais justas:</p>
-  <div class="how">
-    <div class="card"><span class="n">Conta 1</span><h3>A balança entre os dois</h3><p>No 1º turno, olhamos só os votos de Lula e Flávio, como se fossem 100%. Depois comparamos com o 2º turno. Se a balança mexeu menos de 1 ponto, a página diz <b>“manteve”</b>.</p></div>
-    <div class="card"><span class="n">Conta 2</span><h3>Votos de verdade</h3><p>Quantos votos <b>a mais ou a menos</b> cada um teve. Assim dá para ver se os dois cresceram, se só um cresceu ou se alguém perdeu votos.</p></div>
-  </div>
-</section>
-
-<section aria-labelledby="h-disputa">
-  <h2 id="h-disputa">Os votos que estão em jogo</h2>
-  <p class="sub lg">No 1º turno, <b>9,3 milhões</b> de votos válidos foram para outros candidatos. Hoje esses eleitores escolhem entre os dois, votam branco ou nulo, ou não vão votar.</p>
-  <div class="card">
-    <span class="big" id="gap"></span>
-    <p id="gap-txt"></p>
-    <div class="pool" id="pool"></div>
-    <span class="src"><a href="https://sig.tse.jus.br/ords/dwapr/r/seai/sig-eleicao-resultados/resultado-da-elei%C3%A7%C3%A3o" target="_blank" rel="noopener">TSE: votação nominal do 1º turno</a></span>
-  </div>
-</section>
-
-<section aria-labelledby="h-regioes">
-  <h2 id="h-regioes">Brasil, região por região</h2>
-  <p class="sub lg">No 1º turno, Lula ganhou no Nordeste e Flávio nas outras quatro regiões. A barra cinza é o voto em outros candidatos, que agora vai se dividir.</p>
-  <div class="grid" id="regioes"></div>
-  <span class="src"><a href="https://hubpolitico.com.br/eleicoes/2026/apuracao/presidente/regioes" target="_blank" rel="noopener">Hub Político: resultado por região (dados do TSE)</a><a href="https://www.congressoemfoco.com.br/noticia/122894/flavio-vence-em-quatro-regioes-lula-domina-nordeste" target="_blank" rel="noopener">Congresso em Foco: regiões</a><a href="https://resultados.tse.jus.br/oficial/app/index.html" target="_blank" rel="noopener">TSE: resultados</a></span>
-</section>
-
-<section aria-labelledby="h-exterior">
-  <h2 id="h-exterior">O exterior, país por país</h2>
-  <p class="sub lg">No 1º turno, Lula teve mais votos fora do Brasil no total (157 mil a 144 mil). Flávio ganhou com folga nos Estados Unidos e no Japão; Lula, em Portugal, no Canadá e na maior parte da Europa.</p>
-  <div class="who" style="font-size:14px"><span><span class="badge doc">Documentado</span> resultado completo</span><span><span class="badge aberto">Em aberto</span> parcial ou soma de boletins</span><span><span class="badge alegacao">Alegação</span> ainda sem confirmação</span></div>
-  <div class="grid" id="lugares"></div>
-  <span class="src"><a href="https://www.infomoney.com.br/politica/eleicoes-2026-como-foram-as-votacoes-nos-paises-no-primeiro-turno/" target="_blank" rel="noopener">InfoMoney: exterior no 1º turno</a><a href="https://www.cnnbrasil.com.br/eleicoes/flavio-vence-nos-eua-e-japao-lula-na-argentina-e-portugal-veja-divisao/" target="_blank" rel="noopener">CNN: EUA, Portugal, Japão, Canadá</a><a href="https://portalmie.com/atualidade/2026/10/eleicoes-2026-veja-como-brasileiros-votaram-no-japao-e-pelo-mundo/" target="_blank" rel="noopener">Portal Mie: Japão no 1º turno</a><a href="https://exame.com/brasil/votacao-para-presidente-no-exterior-veja-quem-venceu-no-japao-china-e-nova-zelandia/" target="_blank" rel="noopener">Exame: Ásia no 1º turno</a><a href="https://www.metropoles.com/mundo/votacao-no-exterior-lula-sai-na-frente-de-flavio-em-apuracao-parcial" target="_blank" rel="noopener">Metrópoles: 2º turno parcial</a><a href="https://www.cnnbrasil.com.br/eleicoes/na-coreia-do-sul-lula-tem-643-no-2o-turno-flavio-356/" target="_blank" rel="noopener">CNN: Coreia do Sul</a><a href="https://www.jairsampaio.com/flavio-bolsonaro-amplia-votacao-no-japao-e-supera-81-dos-votos-validos-em-hamamatsu-e-nagoya-no-2o-turno/" target="_blank" rel="noopener">Jair Sampaio: Nagoia e Hamamatsu no 2º turno</a><a href="https://www.diariodocentrodomundo.com.br/primeiros-votos-apurados-lula-vence-flavio-na-nova-zelandia-e-lidera-em-sydney" target="_blank" rel="noopener">DCM: Nova Zelândia e Sydney</a></span>
-</section>
-
-<section aria-labelledby="h-japao">
-  <h2 id="h-japao">O caso do Japão</h2>
-  <p class="lg">O Japão é o 3º maior eleitorado brasileiro fora do país, com 88 mil eleitores. Em Nagoia e Hamamatsu, <b>Flávio ganhou mais votos</b> (cerca de 2.600 a mais) do que Lula (cerca de 1.200 a mais). Mas, em proporção, <b>Lula cresceu mais</b>: a fatia dele entre os dois subiu uns 2,5 pontos. Por isso as duas manchetes do dia estão certas ao mesmo tempo: “Flávio amplia votação” e “Lula sobe”.</p>
-  <p class="note">No 1º turno, a participação no Japão foi de 41,5% (36.627 de 88.293 eleitores). Tóquio ainda não aparece somado nas fontes consultadas.</p>
-</section>
-
-<section aria-labelledby="h-resumo">
-  <div class="verdict">
-    <h2 id="h-resumo">Resumindo</h2>
-    <ul>
-      <li>No 1º turno, Flávio terminou <b>2,2 milhões de votos</b> à frente.</li>
-      <li><b>9,3 milhões</b> de votos de outros candidatos estão em disputa.</li>
-      <li>No exterior, até agora, <b>nenhum país virou</b> e os dois cresceram em votos.</li>
-      <li>O que vale de verdade é o Brasil: a partir das 17h de Brasília esta página ganha os números das regiões.</li>
-    </ul>
-  </div>
-</section>
-
-<details class="mais">
-  <summary>Quer ver todos os números? Toque aqui</summary>
-  <div class="mais-body">
-    <h3>Tabela completa</h3>
-    <table id="tabela"></table>
-    <p class="note">“Balança” = votos de Lula ÷ (Lula + Flávio). No 1º turno de Sydney só existe a porcentagem; a balança foi calculada com ela. Os números do 2º turno no exterior vêm de somas de boletins de urna publicadas pela imprensa e podem mudar um pouco na totalização oficial do TSE.</p>
-  </div>
-</details>
-
-<footer>
-  <p>Números do 1º turno: TSE, 100% das seções. Números do 2º turno: parciais, com a fonte ao lado de cada um.</p>
+<footer class="wrap">
   <p id="upd"></p>
+  <p><a href="#/fontes">Fontes e como a conta é feita</a> · <a href="https://fcarvalhodev.github.io/rotas/metodologia.html">Como as Rotas separam fatos e alegações</a></p>
 </footer>
-
-<section id="fontes-revisao" aria-labelledby="h-fontes-revisao" style="margin-block:32px;padding:20px;border:1px solid var(--line);border-radius:6px">
-<h2 id="h-fontes-revisao">Fontes e limites da leitura</h2>
-<p>Esta página compara números, não explica por que alguém mudou o voto. Diferença entre turnos pode vir de quem trocou de candidato, de quem votou em outro nome no 1º turno ou de quem foi (ou não foi) votar. Na China, o recorte de cidades do 1º turno pode não ser o mesmo do 2º. O número de Sydney é uma alegação até ser confirmado.</p>
-<div class="src"><a href="https://resultados.tse.jus.br/oficial/app/index.html" target="_blank" rel="noopener">TSE: resultados oficiais</a><a href="https://www.otempo.com.br/eleicoes/2026/analises/mapa-dos-votos/exterior" target="_blank" rel="noopener">O Tempo: eleitorado por país</a></div>
-<p style="font-size:14px"><a href="https://fcarvalhodev.github.io/rotas/metodologia.html">Como distinguimos fatos, alegações e interpretações</a></p>
-</section>
-</main>
 
 <script src="dados.js"></script>
 <script>
 (function(){
-const D=window.URNAS;
+const D=window.URNAS, V=document.getElementById('view');
 const fmt=n=>Math.round(n).toLocaleString('pt-BR');
 const pc=n=>n.toFixed(1).replace('.',',');
-const sgn=n=>(n>0?'+':n<0?'−':'')+fmt(Math.abs(n));
-const LBL={doc:'Documentado',aberto:'Em aberto',alegacao:'Alegação'};
+const sgn=n=>(n>0?'+':n<0?'−':'±')+fmt(Math.abs(n));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LBL={doc:'Documentado',aberto:'Em aberto',alegacao:'Alegação',calc:'Calculado'};
+const LBLX={doc:'resultado completo do TSE',aberto:'parcial ou soma de boletins de urna',alegacao:'ainda sem confirmação',calc:'conta feita aqui a partir de outros números'};
 
-// balança Lula entre os dois (0–100)
-function share(t){ if(!t) return null; if(t.l!=null&&t.f!=null) return t.l/(t.l+t.f)*100; if(t.lp!=null) return t.lp/(t.lp+t.fp)*100; return null; }
-
-function bar(label,t,withOthers){
-  if(!t) return `<div class="split"><div class="lab"><span>${label}</span></div><div class="bar wait">aguardando</div></div>`;
-  let l,f,o=0;
-  if(withOthers&&t.lp!=null){ l=t.lp; f=t.fp; o=Math.max(0,100-l-f); }
-  else { const s=share(t); l=s; f=100-s; }
-  return `<div class="split"><div class="lab"><span>${label}</span><span>${withOthers&&o?'com outros':'só os dois'}</span></div>
-  <div class="bar" role="img" aria-label="${label}: Lula ${pc(l)}%, Flávio ${pc(f)}%${o?`, outros ${pc(o)}%`:''}">
-  <span class="l" style="width:${l}%">${pc(l)}%</span>${o?`<span class="o" style="width:${o}%">${o>8?pc(o)+'%':''}</span>`:''}<span class="f" style="width:${f}%">${pc(f)}%</span></div></div>`;
+/* ---------- contas ---------- */
+const has=t=>t&&t.l!=null&&t.f!=null;
+function share(t){ if(!t) return null; if(has(t)) return t.l/(t.l+t.f)*100; if(t.lp!=null&&t.fp!=null) return t.lp/(t.lp+t.fp)*100; return null; }
+function sum(arr,k){ if(!arr.length||arr.some(x=>!has(x[k]))) return null; return {f:arr.reduce((a,x)=>a+x[k].f,0), l:arr.reduce((a,x)=>a+x[k].l,0)}; }
+function read(t1,t2){ // leitura curta da mudança
+  const s1=share(t1), s2=share(t2);
+  if(s2==null) return {txt:'aguardando',c:'var(--muted)'};
+  if(s1==null) return {txt:'só 2º turno',c:'var(--muted)'};
+  const d=s2-s1;
+  if((s1>=50)!==(s2>=50)) return {txt:'virou para '+(s2>=50?'Lula':'Flávio'),c:'var(--no)',d};
+  if(Math.abs(d)<1) return {txt:'manteve',c:'var(--accent)',d};
+  return {txt:(d>0?'+':'−')+pc(Math.abs(d))+' pt '+(d>0?'Lula':'Flávio'),c:d>0?'var(--lula)':'var(--flavio)',d};
 }
-
-function verdict(t1,t2){
-  const out=[]; if(!t1||!t2) return out;
-  const s1=share(t1), s2=share(t2), d=s2-s1;
-  const lead1=s1>=50?'Lula':'Flávio', lead2=s2>=50?'Lula':'Flávio';
-  if(lead1!==lead2) out.push(['Virou para '+lead2,'var(--no)']); else out.push([lead1+' continua na frente','var(--muted)']);
-  if(Math.abs(d)<1) out.push(['Manteve o equilíbrio','var(--accent)']);
-  else out.push([`Pendeu ${pc(Math.abs(d))} pt para ${d>0?'Lula':'Flávio'}`, d>0?'var(--lula)':'var(--flavio)']);
-  if(t1.l!=null&&t2.l!=null){
-    const dl=t2.l-t1.l, df=t2.f-t1.f;
-    if(dl>0&&df>0) out.push(['Os dois ganharam votos','var(--ok)']);
-    else if(dl>0) out.push(['Só Lula ganhou votos','var(--lula)']);
-    else if(df>0) out.push(['Só Flávio ganhou votos','var(--flavio)']);
-    else out.push(['Os dois perderam votos','var(--no)']);
-  }
+function tags(t1,t2){
+  const out=[]; const s1=share(t1), s2=share(t2); if(s1==null||s2==null) return out;
+  const d=s2-s1, a=s1>=50?'Lula':'Flávio', b=s2>=50?'Lula':'Flávio';
+  out.push(a!==b?['Virou para '+b,'var(--no)']:[b+' continua na frente','var(--muted)']);
+  out.push(Math.abs(d)<1?['Manteve o equilíbrio','var(--accent)']:[`Pendeu ${pc(Math.abs(d))} pt para ${d>0?'Lula':'Flávio'}`,d>0?'var(--lula)':'var(--flavio)']);
+  if(has(t1)&&has(t2)){ const dl=t2.l-t1.l, df=t2.f-t1.f;
+    out.push(dl>0&&df>0?['Os dois ganharam votos','var(--ok)']:dl>0?['Só Lula ganhou votos','var(--lula)']:df>0?['Só Flávio ganhou votos','var(--flavio)']:['Os dois perderam votos','var(--no)']); }
   return out;
 }
 
-function deltas(t1,t2){
-  if(!t1||!t2||t1.l==null||t2.l==null) return '';
-  return `<div class="delta"><div style="--c:var(--lula)"><b>${sgn(t2.l-t1.l)}</b><span>votos para Lula</span></div><div style="--c:var(--flavio)"><b>${sgn(t2.f-t1.f)}</b><span>votos para Flávio</span></div></div>`;
+/* ---------- peças ---------- */
+function bar(label,t,withOthers){
+  if(!t) return `<div class="split"><div class="lab"><span>${label}</span></div><div class="bar wait">aguardando</div></div>`;
+  let l,f,o=0;
+  if(withOthers&&t.lp!=null){ l=t.lp; f=t.fp; o=Math.max(0,100-l-f); } else { l=share(t); f=100-l; }
+  return `<div class="split"><div class="lab"><span>${label}</span><span>${o?'com os outros candidatos':'só os dois'}</span></div>
+  <div class="bar" role="img" aria-label="${label}: Lula ${pc(l)}%, Flávio ${pc(f)}%${o?`, outros ${pc(o)}%`:''}"><span class="l" style="width:${l}%">${l>9?pc(l)+'%':''}</span>${o?`<span class="o" style="width:${o}%">${o>9?pc(o)+'%':''}</span>`:''}<span class="f" style="width:${f}%">${f>9?pc(f)+'%':''}</span></div></div>`;
+}
+function votes(t,lbl){ return has(t)?`<p class="note">${lbl}: Lula <b>${fmt(t.l)}</b> · Flávio <b>${fmt(t.f)}</b></p>`:''; }
+function compare(t1,t2,opt={}){
+  const tg=tags(t1,t2).map(([t,c])=>`<span class="tag" style="--c:${c}">${t}</span>`).join('');
+  const dl=has(t1)&&has(t2)?`<div class="delta"><div style="--c:var(--lula)"><b>${sgn(t2.l-t1.l)}</b><span>votos para Lula</span></div><div style="--c:var(--flavio)"><b>${sgn(t2.f-t1.f)}</b><span>votos para Flávio</span></div></div>`:'';
+  return `<div class="card">${bar('1º turno · 4 de outubro',t1,opt.others)}${votes(t1,'1º turno')}${bar('2º turno · 25 de outubro',t2,false)}${votes(t2,'2º turno')}
+    ${tg?`<div class="tags">${tg}</div>`:''}${dl}
+    ${opt.status?`<span class="badge ${opt.status}" title="${LBLX[opt.status]}">${LBL[opt.status]}</span>`:''}${opt.nota?`<p class="note">${esc(opt.nota)}</p>`:''}</div>`;
+}
+function mini(t){ const s=share(t); if(s==null) return `<div class="b w"></div>`; return `<div class="b"><i style="width:${s}%;background:var(--lula)"></i><i style="width:${100-s}%;background:var(--flavio)"></i></div>`; }
+function row(href,name,small,t1,t2){
+  const r=read(t1,t2), s1=share(t1), s2=share(t2);
+  return `<a class="row" href="${href}"><span class="nm">${esc(name)}${small?`<small>${esc(small)}</small>`:''}</span><span class="go" aria-hidden="true">›</span>
+  <span class="mini" aria-label="1º turno ${s1!=null?'Lula '+pc(s1)+'%':'sem dado'}, 2º turno ${s2!=null?'Lula '+pc(s2)+'%':'aguardando'}">${mini(t1)}${mini(t2)}
+  <span class="cap"><span>1º ${s1!=null?pc(s1)+'% Lula':'—'} · 2º ${s2!=null?pc(s2)+'% Lula':'—'}</span><b style="--c:${r.c}">${r.txt}</b></span></span></a>`;
 }
 
-function card(name,small,t1,t2,withOthers,extra){
-  const tags=verdict(t1,t2).map(([t,c])=>`<span class="tag" style="--c:${c}">${t}</span>`).join('');
-  return `<article class="card place"><h3>${name}<small>${small||''}</small></h3>
-  ${bar('1º turno · 4 out',t1,withOthers)}${bar('2º turno · 25 out',t2,false)}
-  ${tags?`<div class="tags">${tags}</div>`:''}${deltas(t1,t2)}${extra||''}</article>`;
+/* ---------- mapa ---------- */
+let mapMode='t1';
+function tileColor(e){ // devolve [cor, texto escuro?]
+  let base,k;
+  if(mapMode==='mud'){ const r=read(e.t1,e.t2); if(r.d==null) return null;
+    if(Math.abs(r.d)<1) return ['var(--outros)',false];
+    base=r.d>0?'var(--lula)':'var(--flavio)'; k=Math.min(100,45+Math.abs(r.d)*11); }
+  else { const s=share(e[mapMode]); if(s==null) return null;
+    base=s>=50?'var(--lula)':'var(--flavio)'; k=Math.min(100,35+Math.abs(s-50)*2.6); }
+  return [`color-mix(in oklab,${base} ${k}%,var(--paper))`,k<62];
+}
+function tileLabel(e){
+  if(mapMode==='mud'){ const r=read(e.t1,e.t2); return r.d==null?'':(Math.abs(r.d)<1?'=':(r.d>0?'+':'−')+pc(Math.abs(r.d))); }
+  const s=share(e[mapMode]); if(s==null) return ''; return s>=50?'L '+Math.round(s):'F '+Math.round(100-s);
+}
+function tmap(focus){
+  let h=''; for(const r of D.regioes) for(const e of r.estados){
+    const c=tileColor(e), dim=focus&&focus!==r.id;
+    h+=`<a class="tile${c?'':' wait'}${dim?' dim':''}" style="grid-column:${e.x+1};grid-row:${e.y+1};${c?`--bgc:${c[0]};${c[1]?'color:var(--ink)':''}`:''}" href="#/brasil/${r.id}/${e.uf}" aria-label="${e.nome}">${e.uf}<small>${tileLabel(e)}</small></a>`; }
+  return h;
+}
+function mapBlock(focus){
+  const any2=D.regioes.some(r=>r.estados.some(e=>e.t2));
+  return `<div class="mapbox card"><div class="seg" role="group" aria-label="O que o mapa mostra">
+    <button type="button" data-m="t1" aria-pressed="${mapMode==='t1'}">1º turno</button><button type="button" data-m="t2" aria-pressed="${mapMode==='t2'}">2º turno</button><button type="button" data-m="mud" aria-pressed="${mapMode==='mud'}">O que mudou</button></div>
+    <div class="tmap" id="tmap">${tmap(focus)}</div>
+    <div class="scale" id="scale">${scaleTxt()}</div>
+    ${!any2&&mapMode!=='t1'?'<p class="note">Os estados ficam listrados até o TSE divulgar o 2º turno, a partir das 17h de Brasília.</p>':''}
+    <p class="note">Toque em um estado para ver os números dele. L = % de Lula, F = % de Flávio, contando só os dois.</p></div>`;
+}
+function scaleTxt(){ return mapMode==='mud'?'<span style="color:var(--flavio)">■ pendeu para Flávio</span> <span>■ manteve</span> <span style="color:var(--lula)">■ pendeu para Lula</span>':'<span style="color:var(--flavio)">■ Flávio na frente</span><span style="color:var(--lula)">■ Lula na frente</span><span>· cor mais forte = vantagem maior</span>'; }
+
+/* ---------- telas ---------- */
+const BR=()=>D.brasil.t2||sum(D.regioes.map(r=>({t2:r.t2||sum(r.estados,'t2')})),'t2');
+const regT1=r=>sum(r.estados,'t1'), regT2=r=>r.t2||sum(r.estados,'t2');
+const regValid=r=>r.estados.reduce((a,e)=>a+e.t1.f/(e.t1.fp/100),0);
+
+function home(){
+  const b=D.brasil.t1, ex=D.exterior;
+  const placesDone=[]; for(const p of ex.paises){ if(share(p.t1)!=null&&share(p.t2)!=null) placesDone.push({h:`#/exterior/${p.id}`,n:p.nome,r:read(p.t1,p.t2)}); }
+  placesDone.sort((a,b)=>Math.abs(b.r.d)-Math.abs(a.r.d));
+  return {crumbs:[], html:`
+  <div class="kicker">Rota das Urnas</div>
+  <h1>1º turno × 2º turno</h1>
+  <p class="lg">Em 4 de outubro, Flávio Bolsonaro (PL) ficou em primeiro e Lula (PT) em segundo. Hoje os dois se enfrentam de novo. Escolha onde quer olhar.</p>
+  <div class="live" role="status"><span class="dot" aria-hidden="true"></span><span>${esc(D.aviso)}</span></div>
+  <div class="doors">
+    <a class="door" href="#/brasil"><span class="t"><b>Brasil</b><span>5 regiões · 27 estados ›</span></span>${bar('1º turno',{l:b.l,f:b.f,lp:b.l/b.validos*100,fp:b.f/b.validos*100},true)}${bar('2º turno',BR(),false)}<p>Toque para ver o mapa e escolher a região ou o estado.</p></a>
+    <a class="door" href="#/exterior"><span class="t"><b>Exterior</b><span>${ex.paises.length} países ›</span></span>${bar('1º turno',ex.t1,true)}${bar('2º turno '+(ex.t2&&ex.t2.parcial?'(parcial)':''),ex.t2,false)}<p>Toque para escolher o país e depois a cidade.</p></a>
+  </div>
+  ${placesDone.length?`<section style="display:grid;gap:10px"><h2>Já dá para comparar</h2><p class="sub">Lugares do exterior com os dois turnos contados, do que mais mexeu para o que menos mexeu.</p><div class="list">${placesDone.slice(0,5).map(x=>{const p=ex.paises.find(p=>'#/exterior/'+p.id===x.h);return row(x.h,x.n,p.cont,p.t1,p.t2)}).join('')}</div><a class="note" href="#/exterior">Ver todos os países ›</a></section>`:''}
+  <section style="display:grid;gap:10px"><h2>Como comparar sem enganar</h2>
+  <p class="sub">No 1º turno havia 13 candidatos, então a porcentagem dos dois sempre sobe no 2º. Por isso cada tela mostra duas contas:</p>
+  <div class="how"><div class="card"><h3>A balança entre os dois</h3><p class="note">No 1º turno, contamos só os votos de Lula e Flávio, como se fossem 100%, e comparamos com o 2º. Se mexeu menos de 1 ponto, aparece <b>“manteve”</b>.</p></div>
+  <div class="card"><h3>Votos de verdade</h3><p class="note">Quantos votos <b>a mais ou a menos</b> cada um teve. Dá para ver se os dois cresceram, se só um cresceu ou se alguém perdeu.</p></div></div></section>
+  <section style="display:grid;gap:10px"><h2>Os votos em jogo</h2>
+  <div class="card"><span class="big">${fmt(b.validos-b.f-b.l)}</span><p>votos foram para outros candidatos no 1º turno. A vantagem de Flávio sobre Lula foi de <b>${fmt(b.f-b.l)}</b>.</p>
+  <div class="pool">${D.brasil.outros.map(([n,v])=>`<div class="r"><b>${esc(n)}</b><span>${fmt(v)}</span><div class="t"><i style="width:${v/D.brasil.outros[0][1]*100}%"></i></div></div>`).join('')}</div></div></section>`};
 }
 
-// votos em disputa
-const B=D.brasil.t1, others=B.validos-B.f-B.l;
-document.getElementById('gap').textContent=fmt(others);
-document.getElementById('gap-txt').innerHTML=`votos foram para outros candidatos. A vantagem de Flávio sobre Lula no 1º turno foi de <b>${fmt(B.f-B.l)}</b> votos.`;
-const mx=D.outros[0][1];
-document.getElementById('pool').innerHTML=D.outros.map(([n,v])=>`<div class="r"><b>${n}</b><span>${fmt(v)}</span><div class="t"><i style="width:${v/mx*100}%"></i></div></div>`).join('');
+function brasil(){
+  return {crumbs:[['Brasil']], back:'#/', html:`
+  <h2>Brasil</h2>
+  <div class="cols two"><div>${mapBlock(null)}</div>
+  <div style="display:grid;gap:10px"><p class="sub">Ou escolha a região:</p><div class="list">${D.regioes.map(r=>row(`#/brasil/${r.id}`,r.nome,r.estados.length+' estados',regT1(r),regT2(r))).join('')}</div></div></div>`};
+}
 
-// regiões
-document.getElementById('regioes').innerHTML=
-  card('Brasil inteiro','',{l:B.l,f:B.f,lp:B.l/B.validos*100,fp:B.f/B.validos*100},D.brasil.t2,true)+
-  D.regioes.map(r=>{
-    const val=r.t1.f/(r.t1.fp/100), oth=val-r.t1.f-r.t1.l;
-    return card(r.nome,r.estados+' estados',r.t1,r.t2,true,`<p class="note">Em disputa na região: cerca de ${fmt(Math.round(oth/1000)*1000)} votos de outros candidatos.</p>`);
-  }).join('');
+function regiao(r){
+  const t1=regT1(r), val=regValid(r);
+  return {crumbs:[['Brasil','#/brasil'],[r.nome]], back:'#/brasil', html:`
+  <h2>${r.nome}</h2>
+  <div class="cols two"><div style="display:grid;gap:12px">${compare({...t1,lp:t1.l/val*100,fp:t1.f/val*100},regT2(r),{others:true})}
+  <p class="note">No 1º turno, cerca de <b>${fmt(Math.round((val-t1.f-t1.l)/1000)*1000)}</b> votos da região foram para outros candidatos.</p></div>
+  <div style="display:grid;gap:10px"><p class="sub">Escolha o estado:</p><div class="list">${r.estados.map(e=>row(`#/brasil/${r.id}/${e.uf}`,e.nome,e.uf,e.t1,e.t2)).join('')}</div></div></div>
+  ${mapBlock(r.id)}`};
+}
 
-// exterior
-const ext=D.exterior;
-document.getElementById('lugares').innerHTML=
-  card('Exterior inteiro','134 países',ext.t1,ext.t2,true,'<p class="note">Total oficial do 2º turno sai com a totalização do TSE.</p>')+
-  D.lugares.map(p=>card(p.nome,p.grupo,p.t1,p.t2,false,`<span class="badge ${p.status}">${LBL[p.status]}</span>${p.nota?`<p class="note">${p.nota}</p>`:''}`)).join('');
+function estado(r,e){
+  const i=r.estados.indexOf(e), prev=r.estados[(i-1+r.estados.length)%r.estados.length], next=r.estados[(i+1)%r.estados.length];
+  return {crumbs:[['Brasil','#/brasil'],[r.nome,`#/brasil/${r.id}`],[e.nome]], back:`#/brasil/${r.id}`, html:`
+  <div class="kicker">${r.nome}</div><h2>${e.nome}</h2>
+  ${compare(e.t1,e.t2,{others:true,status:e.t2?e.status||'doc':null})}
+  <p class="note">No 1º turno, ${pc(100-e.t1.fp-e.t1.lp)}% dos votos válidos foram para outros candidatos.</p>
+  <div class="list" style="grid-template-columns:1fr 1fr">${row(`#/brasil/${r.id}/${prev.uf}`,'‹ '+prev.nome,'estado anterior',prev.t1,prev.t2)}${row(`#/brasil/${r.id}/${next.uf}`,next.nome+' ›','próximo estado',next.t1,next.t2)}</div>`};
+}
 
-// tabela
-const rows=[['Brasil',{l:B.l,f:B.f},D.brasil.t2]].concat(D.regioes.map(r=>[r.nome,r.t1,r.t2]),[['Exterior',ext.t1,ext.t2]],D.lugares.map(p=>[p.nome,p.t1,p.t2]));
-const cell=(t,k)=>t&&t[k]!=null?fmt(t[k]):'—';
-document.getElementById('tabela').innerHTML=`<tr><th>Lugar</th><th>Lula 1º</th><th>Flávio 1º</th><th>Lula 2º</th><th>Flávio 2º</th><th>Balança 1º → 2º</th></tr>`+
-  rows.map(([n,a,b])=>{const s1=share(a),s2=share(b);return `<tr><td>${n}</td><td class="n">${cell(a,'l')}</td><td class="n">${cell(a,'f')}</td><td class="n">${cell(b,'l')}</td><td class="n">${cell(b,'f')}</td><td class="n">${s1!=null?pc(s1)+'%':'—'} → ${s2!=null?pc(s2)+'%':'—'}</td></tr>`}).join('');
+function exterior(){
+  const ex=D.exterior, conts=[...new Set(ex.paises.map(p=>p.cont))];
+  const done=ex.paises.filter(p=>p.t2).length;
+  return {crumbs:[['Exterior']], back:'#/', html:`
+  <h2>Exterior</h2>
+  ${compare(ex.t1,ex.t2,{others:true,nota:ex.t2nota})}
+  <p class="sub">${done} de ${ex.paises.length} países já têm número do 2º turno. Escolha o país:</p>
+  ${conts.map(c=>{const ps=ex.paises.filter(p=>p.cont===c);return `<div class="grp"><span>${c}</span><span>${ps.filter(p=>p.t2).length}/${ps.length} com 2º turno</span></div><div class="list">${ps.map(p=>row(`#/exterior/${p.id}`,p.nome,p.cidades?p.cidades.length+(p.cidades.length>1?' cidades':' cidade'):(p.eleitores?fmt(p.eleitores)+' eleitores':''),p.t1,p.t2)).join('')}</div>`}).join('')}
+  <p class="note">A lista traz os maiores eleitorados e os países que já fecharam as urnas. O total oficial de todos os 134 países sai com a totalização do TSE.</p>`};
+}
 
+function pais(p){
+  return {crumbs:[['Exterior','#/exterior'],[p.nome]], back:'#/exterior', html:`
+  <div class="kicker">${p.cont}${p.eleitores?' · '+fmt(p.eleitores)+' eleitores':''}</div><h2>${esc(p.nome)}</h2>
+  ${compare(p.t1,p.t2,{status:p.status,nota:p.nota})}
+  ${p.cidades?`<p class="sub">Escolha a cidade:</p><div class="list">${p.cidades.map(c=>row(`#/exterior/${p.id}/${c.id}`,c.nome,'',c.t1,c.t2)).join('')}</div>`:'<p class="note">Neste país há uma só cidade com urna, ou as fontes não separam por cidade.</p>'}`};
+}
+
+function cidade(p,c){
+  const i=p.cidades.indexOf(c), next=p.cidades[(i+1)%p.cidades.length];
+  return {crumbs:[['Exterior','#/exterior'],[p.nome,`#/exterior/${p.id}`],[c.nome]], back:`#/exterior/${p.id}`, html:`
+  <div class="kicker">${esc(p.nome)}</div><h2>${esc(c.nome)}</h2>
+  ${compare(c.t1,c.t2,{status:c.t2?(c.status||'aberto'):null,nota:c.nota})}
+  ${p.cidades.length>1?`<div class="list">${row(`#/exterior/${p.id}/${next.id}`,next.nome+' ›','próxima cidade',next.t1,next.t2)}</div>`:''}`};
+}
+
+function fontes(){
+  return {crumbs:[['Fontes']], back:'#/', html:`
+  <h2>Fontes e como a conta é feita</h2>
+  <div class="card"><h3>As etiquetas</h3>${Object.keys(LBL).map(k=>`<p class="note"><span class="badge ${k}">${LBL[k]}</span> ${LBLX[k]}</p>`).join('')}</div>
+  <div class="card"><h3>Limites</h3><p class="note">O site compara números, não explica por que alguém mudou o voto. A diferença entre os turnos pode vir de quem trocou de candidato, de quem votou em outro nome no 1º turno ou de quem foi (ou não foi) votar. Os números do 2º turno no exterior vêm de somas de boletins de urna publicadas pela imprensa e podem mudar um pouco na totalização do TSE. Tóquio e a China continental são calculados: total do país menos as outras cidades.</p></div>
+  <div class="card"><h3>De onde vem cada número</h3><div class="src" style="display:grid;gap:6px">${D.fontes.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(t)}</a>`).join('')}</div></div>`};
+}
+function nf(){ return {crumbs:[['Não encontrado']], back:'#/', html:`<h2>Não achei esta página</h2><p><a href="#/">Voltar ao início</a></p>`}; }
+
+/* ---------- roteador ---------- */
+function route(){
+  const parts=(location.hash.replace(/^#\/?/,'')||'').split('/').filter(Boolean).map(decodeURIComponent);
+  let v;
+  if(!parts.length) v=home();
+  else if(parts[0]==='brasil'){
+    if(!parts[1]) v=brasil();
+    else { const r=D.regioes.find(r=>r.id===parts[1]);
+      if(!r) v=nf(); else if(!parts[2]) v=regiao(r); else { const e=r.estados.find(e=>e.uf===parts[2].toUpperCase()); v=e?estado(r,e):nf(); } }
+  } else if(parts[0]==='exterior'){
+    if(!parts[1]) v=exterior();
+    else { const p=D.exterior.paises.find(p=>p.id===parts[1]);
+      if(!p) v=nf(); else if(!parts[2]) v=pais(p); else { const c=(p.cidades||[]).find(c=>c.id===parts[2]); v=c?cidade(p,c):nf(); } }
+  } else if(parts[0]==='fontes') v=fontes(); else v=nf();
+
+  V.innerHTML=v.html; V.classList.remove('enter'); void V.offsetWidth; V.classList.add('enter');
+  const cr=document.getElementById('crumbs'), all=[['Início','#/'],...v.crumbs];
+  cr.innerHTML=all.map((c,i)=>i===all.length-1?`<span aria-current="page">${esc(c[0])}</span>`:`<a href="${c[1]}">${esc(c[0])}</a>`).join('<i aria-hidden="true">›</i>');
+  const bk=document.getElementById('back'); if(v.back){bk.hidden=false;bk.href=v.back;} else bk.hidden=true;
+  const last=all[all.length-1][0]; document.title=(all.length>1?last+' · ':'')+'Rota das Urnas';
+  window.scrollTo(0,0);
+  if(route.ran){ const h=V.querySelector('h2,h1'); if(h){h.tabIndex=-1;h.focus({preventScroll:true});} }
+  route.ran=true;
+}
+V.addEventListener('click',e=>{ const b=e.target.closest('.seg button'); if(!b) return;
+  mapMode=b.dataset.m; V.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  const m=location.hash.split('/')[2]; const focus=location.hash.startsWith('#/brasil/')&&m?m:null;
+  document.getElementById('tmap').innerHTML=tmap(focus); document.getElementById('scale').innerHTML=scaleTxt(); });
+window.addEventListener('hashchange',route);
 document.getElementById('upd').textContent='Atualizado em '+D.atualizado+'.';
+route();
 })();
 </script>
 </body></html>
