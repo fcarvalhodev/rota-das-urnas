@@ -392,6 +392,7 @@ function extSame(){
   const t1={f:P.reduce((a,p)=>a+p.t1.f,0),l:P.reduce((a,p)=>a+p.t1.l,0)}, t2={f:P.reduce((a,p)=>a+p.t2.f,0),l:P.reduce((a,p)=>a+p.t2.l,0)};
   return {P,t1,t2,n:P.length,nomes:P.map(p=>p.nome)};
 }
+function extFrac(){ const ex=D.exterior, v1=ex.t1.l/(ex.t1.lp/100), T=ex.t2?ex.t2.l+ex.t2.f:0; return T/v1*100; }
 function exteriorParcial(){ const ex=D.exterior; return !!(ex.t2&&ex.t2.parcial); }
 // Frase da mudança: deixa claro que o número é a VANTAGEM, não votos ganhos
 function shiftTxt(t1,t2){
@@ -481,7 +482,7 @@ function home(){
   <div class="pleg"><span style="--c:var(--lula)"><i></i>Lula (PT)</span><span style="--c:var(--flavio)"><i></i>Flávio Bolsonaro (PL)</span><span style="--c:var(--outros)"><i></i>Outros candidatos (só no 1º turno)</span></div>
   <div class="doors">
     <a class="door" href="#/brasil"><span class="t"><b>Brasil</b><span>5 regiões · 27 estados ›</span></span>${pies({l:b.l,f:b.f,validos:b.validos,lp:b.l/b.validos*100,fp:b.f/b.validos*100},BR())}${isPartial(BR())?`<p class="warn">Apuração em andamento: ${pc(BR().pst)}% das urnas. A pizza do 2º turno ainda vai mudar.</p>`:''}<p>Toque para ver o mapa e escolher a região ou o estado.</p></a>
-    <a class="door" href="#/exterior"><span class="t"><b>Exterior</b><span>${ex.paises.length} países ›</span></span>${exteriorParcial()?(()=>{const S=extSame();return pies(S.t1,S.t2,'2º turno',`1º turno`)+`<p class="warn">Só os ${S.n} países que já têm os dois turnos (${S.nomes.join(', ')}). O Japão pesa mais de 3/4 desses votos. Europa e Américas ainda não foram contadas.</p>`;})():pies(ex.t1,ex.t2,'2º turno')}<p>Toque para escolher o país e depois a cidade.</p></a>
+    <a class="door" href="#/exterior"><span class="t"><b>Exterior</b><span>${ex.paises.length} países ›</span></span>${exteriorParcial()?(()=>{const S=extSame();return pies(S.t1,S.t2,'2º turno',`1º turno`)+`<p class="warn">Só os ${S.n} países que já têm os dois turnos (${S.nomes.join(', ')}). O Japão pesa mais de 3/4 desses votos. Isso é só cerca de ${Math.round(extFrac())}% dos votos do exterior: Europa, Américas, África e Oriente Médio ainda não foram contados.</p>`;})():pies(ex.t1,ex.t2,'2º turno')}<p>Toque para escolher o país e depois a cidade.</p></a>
   </div>
   ${placesDone.length?`<section style="display:grid;gap:10px"><h2>Já dá para comparar</h2><p class="sub">Países do exterior que já têm os dois turnos, do que tem mais votos para o que tem menos. Onde votaram poucas pessoas, a diferença pula muito com poucos votos.</p><div class="list">${placesDone.slice(0,5).map(x=>{const p=ex.paises.find(p=>'#/exterior/'+p.id===x.h);return row(x.h,x.n,p.cont,p.t1,p.t2)}).join('')}</div><a class="note" href="#/exterior">Ver todos os países ›</a></section>`:''}
   <section style="display:grid;gap:10px"><h2>Como comparar sem enganar</h2>
@@ -524,7 +525,7 @@ function exterior(){
   const done=ex.paises.filter(p=>p.t2).length;
   return {crumbs:[['Exterior']], back:'#/', html:`
   <h2>Exterior</h2>
-  ${exteriorParcial()?(()=>{const S=extSame();return `<p class="warn">O 2º turno do exterior ainda está pela metade. Para não comparar coisas diferentes, o quadro abaixo usa só os <b>${S.n} países que já têm os dois turnos</b>: ${S.nomes.join(', ')}. No 1º turno, no exterior inteiro, Lula teve ${pc(ex.t1.lp)}% e Flávio ${pc(ex.t1.fp)}%.</p>`+compare(S.t1,S.t2,{nota:'Mesmos países nos dois turnos. '+ex.t2nota});})():compare(ex.t1,ex.t2,{others:true,nota:ex.t2nota})}
+  ${exteriorParcial()?(()=>{const S=extSame();return `<p class="warn">O 2º turno do exterior ainda está no começo: só foi somado o equivalente a cerca de <b>${Math.round(extFrac())}%</b> dos votos do exterior (os países da Ásia e da Oceania). Para não comparar coisas diferentes, o quadro abaixo usa só os <b>${S.n} países que já têm os dois turnos</b>: ${S.nomes.join(', ')}. No 1º turno, no exterior inteiro, Lula teve ${pc(ex.t1.lp)}% e Flávio ${pc(ex.t1.fp)}%.</p>`+compare(S.t1,S.t2,{nota:'Mesmos países nos dois turnos. '+ex.t2nota});})():compare(ex.t1,ex.t2,{others:true,nota:ex.t2nota})}
   <p class="sub">${done} de ${ex.paises.length} países já têm número do 2º turno. Escolha o país:</p>
   ${conts.map(c=>{const ps=ex.paises.filter(p=>p.cont===c);return `<div class="grp"><span>${c}</span><span>${ps.filter(p=>p.t2).length}/${ps.length} com 2º turno</span></div><div class="list">${ps.map(p=>row(`#/exterior/${p.id}`,p.nome,p.cidades?p.cidades.length+(p.cidades.length>1?' cidades':' cidade'):(p.eleitores?fmt(p.eleitores)+' eleitores':''),p.t1,p.t2)).join('')}</div>`}).join('')}
   <p class="note">A lista traz os maiores eleitorados e os países que já fecharam as urnas. O total oficial de todos os 134 países sai com a totalização do TSE.</p>`};

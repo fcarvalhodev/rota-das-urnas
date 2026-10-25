@@ -5,7 +5,7 @@
            · "calc" Calculado (conta feita aqui a partir de outros números) · "alegacao" ainda sem confirmação.
    Para atualizar: preencha t2 = {f, l} e troque o status. O site recalcula tudo sozinho. */
 window.URNAS = {
-  atualizado: "25/10/2026 · 20h40 no Japão · 8h40 em Brasília",
+  atualizado: "25/10/2026 · 23h20 no Japão · 11h20 em Brasília (exterior conferido: ainda só Ásia e Oceania)",
   aviso: "Exterior: Ásia e Oceania já apuradas por boletim de urna. Europa, África e Américas votam até a tarde. O TSE divulga tudo a partir das 17h de Brasília (5h de segunda no Japão).",
 
   brasil: {
@@ -146,6 +146,7 @@ window.URNAS = {
     ["Hub Político: 1º turno por estado (dados do TSE)", "https://hubpolitico.com.br/eleicoes/2026/apuracao/presidente/estados"],
     ["Hub Político: 1º turno por região", "https://hubpolitico.com.br/eleicoes/2026/apuracao/presidente/regioes"],
     ["Elves: 1º turno por país e cidade (dados do TSE)", "https://elves.com.br/apuracao-eleitoral/paises/"],
+    ["Exame: 2º turno no exterior, parcial das 10h", "https://exame.com/brasil/lula-ou-flavio-bolsonaro-quem-esta-ganhando-no-exterior-no-2o-turno-das-eleicoes/"],
     ["Metrópoles: 2º turno no exterior, parcial das 8h", "https://www.metropoles.com/mundo/votacao-no-exterior-lula-sai-na-frente-de-flavio-em-apuracao-parcial"],
     ["CNN: 2º turno no exterior por país", "https://www.cnnbrasil.com.br/internacional/eleicoes-2026-exterior-boletins-urna-flavio-lula/"],
     ["CNN: Coreia do Sul", "https://www.cnnbrasil.com.br/eleicoes/na-coreia-do-sul-lula-tem-643-no-2o-turno-flavio-356/"],
