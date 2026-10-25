@@ -1,12 +1,12 @@
 {
  "eleicao": 6258,
  "fonte": "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json",
- "verificado": "2026-10-25T19:05:00Z",
+ "verificado": "2026-10-25T20:05:00Z",
  "brasil": {
   "l": 0,
   "f": 0,
   "pst": 0.0,
-  "tse": "24/10/2026 19:19:13"
+  "tse": "25/10/2026 16:46:00"
  },
  "estados": {
   "AC": {
@@ -184,5 +184,5 @@
   "l": 0,
   "f": 0
  },
- "mudou_em": "2026-10-25T19:05:00Z"
+ "mudou_em": "2026-10-25T20:05:00Z"
 }
