@@ -600,16 +600,17 @@ async function getTSE(){
 }
 function mergeTSE(j){
   if(!j) return;
+  const ok=x=>x&&x.l!=null&&x.f!=null&&(x.l+x.f)>0;   // antes das 17h de Brasília o TSE publica arquivos com 0 votos: ignora
   const st=p=>p!=null&&p>=100?'doc':'aberto';
-  if(j.brasil&&j.brasil.l!=null) D.brasil.t2={l:j.brasil.l,f:j.brasil.f,pst:j.brasil.pst};
+  if(ok(j.brasil)) D.brasil.t2={l:j.brasil.l,f:j.brasil.f,pst:j.brasil.pst};
   for(const r of D.regioes){
-    for(const e of r.estados){ const x=(j.estados||{})[e.uf]; if(x&&x.l!=null){ e.t2={l:x.l,f:x.f,pst:x.pst}; e.status=st(x.pst); } }
+    for(const e of r.estados){ const x=(j.estados||{})[e.uf]; if(ok(x)){ e.t2={l:x.l,f:x.f,pst:x.pst}; e.status=st(x.pst); } }
     if(r.estados.every(e=>has(e.t2))){ const t=sum(r.estados,'t2'); const ps=r.estados.map(e=>e.t2.pst).filter(x=>x!=null); if(ps.length) t.pst=Math.min(...ps); r.t2=t; }
   }
-  if(j.exterior&&j.exterior.l!=null){ D.exterior.t2={l:j.exterior.l,f:j.exterior.f,pst:j.exterior.pst}; D.exterior.t2nota='Total do exterior, direto do TSE.'; }
+  if(ok(j.exterior)){ D.exterior.t2={l:j.exterior.l,f:j.exterior.f,pst:j.exterior.pst}; D.exterior.t2nota='Total do exterior, direto do TSE.'; }
   const b=j.brasil;
   if(j.final) D.aviso='Apuração encerrada: o TSE chegou a 100% das urnas. Os números do Brasil, dos estados e do exterior são os oficiais.';
-  else if(b&&b.pst!=null) D.aviso=`TSE: ${pc(b.pst)}% das urnas apuradas no Brasil${b.tse?' (dados das '+b.tse.split(' ')[1].slice(0,5)+' de Brasília)':''}. O resultado ainda vai mudar até chegar a 100%.`;
+  else if(ok(b)&&b.pst!=null) D.aviso=`TSE: ${pc(b.pst)}% das urnas apuradas no Brasil${b.tse?' (dados das '+b.tse.split(' ')[1].slice(0,5)+' de Brasília)':''}. O resultado ainda vai mudar até chegar a 100%.`;
 }
 function nextRun(now=new Date()){
   const n=new Date(now); n.setUTCMinutes(CRON_MIN,0,0); if(n<=now) n.setUTCHours(n.getUTCHours()+1); return n;
@@ -623,13 +624,13 @@ function tick(){
   if(busy){ el.className='tick busy'; m.innerHTML='Buscando dados novos do TSE…'; }
   else { const t=nextRun(now), s=Math.max(0,Math.round((t-now)/1000));
     el.className='tick'; m.innerHTML=`Próxima atualização em <b>${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}</b>`;
-    sb.textContent=`por volta das ${hm(t)} (seu horário)`+(T&&T.verificado?` · última busca no TSE às ${hm(new Date(T.verificado))}`:'')+(T&&T.brasil&&T.brasil.pst!=null?` · ${pc(T.brasil.pst)}% apurado`:''); }
+    sb.textContent=`por volta das ${hm(t)} (seu horário)`+(T&&T.verificado?` · última busca no TSE às ${hm(new Date(T.verificado))}`:'')+(T&&T.brasil&&T.brasil.pst!=null&&(T.brasil.l+T.brasil.f)>0?` · ${pc(T.brasil.pst)}% apurado`:(T&&T.verificado?' · o TSE começa a divulgar às 17h de Brasília':'')); }
 }
 function toast(txt){ const t=document.createElement('div'); t.className='toast'; t.textContent=txt; document.body.appendChild(t); setTimeout(()=>t.remove(),4000); }
 async function refresh(silent){
   const j=await getTSE(); if(!j) return false;
   const changed=!T||j.verificado!==T.verificado;
-  if(changed){ T=j; mergeTSE(j); if(j.brasil||j.exterior){ route(true); if(!silent&&j.mudou_em===j.verificado) toast('Números atualizados com o TSE'); } }
+  if(changed){ T=j; mergeTSE(j); if((j.brasil&&(j.brasil.l+j.brasil.f)>0)||(j.exterior&&(j.exterior.l+j.exterior.f)>0)){ route(true); if(!silent&&j.mudou_em===j.verificado) toast('Números atualizados com o TSE'); } }
   return changed;
 }
 // ao zerar o contador, a Action do GitHub costuma levar alguns minutos para rodar: tenta a cada 60 s por até 20 min
