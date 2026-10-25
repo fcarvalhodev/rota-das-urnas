@@ -96,6 +96,7 @@ p{margin:0}
 .pie figcaption{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .warn{font-family:var(--ui);font-size:14px;line-height:1.45;background:var(--part-soft);color:var(--ink);border-left:4px solid var(--part);border-radius:4px;padding:8px 10px}
 .flag{font-family:var(--ui);font-size:12px;font-weight:700;color:var(--part);background:var(--part-soft);border-radius:999px;padding:1px 8px}
+.pdiff span{display:block}.pdiff .shift{margin-top:4px;color:var(--ink)}
 .pdiff{font-family:var(--ui);font-size:15px;text-align:center;color:var(--muted)}
 .pleg{display:flex;flex-wrap:wrap;gap:4px 16px;font-family:var(--ui);font-weight:600;font-size:15px}
 .pleg i{display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:-2px}
@@ -233,7 +234,7 @@ function read(t1,t2){ // leitura curta da mudança
   const d=s2-s1;
   if((s1>=50)!==(s2>=50)) return {txt:'virou para '+(s2>=50?'Lula':'Flávio'),c:'var(--no)',d};
   if(Math.abs(d)<1) return {txt:'manteve',c:'var(--accent)',d};
-  return {txt:(d>0?'+':'−')+pc(Math.abs(d))+' pt '+(d>0?'Lula':'Flávio'),c:d>0?'var(--lula)':'var(--flavio)',d};
+  return {txt:'balança: '+pc(Math.abs(d))+' pt p/ '+(d>0?'Lula':'Flávio'),c:d>0?'var(--lula)':'var(--flavio)',d};
 }
 function tags(t1,t2){
   const out=[]; const s1=share(t1), s2=share(t2); if(s1==null||s2==null) return out;
@@ -321,9 +322,9 @@ function diffChart(t1,t2){
         layout:{padding:{left:4,right:8}},
         plugins:{legend:{display:false},
           tooltip:{callbacks:{label:c=>c.raw==null?'aguardando':lead(c.raw)+' à frente por '+pc(Math.abs(c.raw))+' pontos'}},
-          datalabels:{anchor:'end',align:'end',clamp:true,
-            color:ink,font:{family:'JetBrains Mono, monospace',weight:'700',size:13},
-            formatter:v=>v==null?'aguardando':lead(v)+' +'+pc(Math.abs(v))}},
+          datalabels:{anchor:c=>{const v=c.dataset.data[c.dataIndex];return v!=null&&v<0?'start':'end';},align:c=>{const v=c.dataset.data[c.dataIndex],small=v!=null&&Math.abs(v)<lim*.22;return v!=null&&v<0?(small?'left':'right'):(small?'right':'left');},offset:6,clamp:true,
+            color:c=>{const v=c.dataset.data[c.dataIndex];return v!=null&&Math.abs(v)<lim*.22?ink:'#fff';},font:{family:'JetBrains Mono, monospace',weight:'700',size:13},
+            formatter:v=>v==null?'aguardando':pc(Math.abs(v))+' pts'}},
         scales:{x:{min:-lim,max:lim,ticks:{stepSize:lim/2,callback:v=>v===0?'0':Math.abs(v)},grid:{color:c=>c.tick.value===0?ink:css('--line'),lineWidth:c=>c.tick.value===0?2:1}},
           y:{grid:{display:false},ticks:{font:{size:14,weight:'700'},color:ink}}}}});
   }});
@@ -333,7 +334,7 @@ function diffChart(t1,t2){
 function diffBlock(t1,t2,others){
   const m1=marg(t1), m2=marg(t2), s1=share(t1), s2=share(t2);
   const line=(lbl,m,s,extra)=>m==null?`<div class="dl"><span class="dk">${lbl}</span><b class="dv wait">aguardando</b></div>`:
-    `<div class="dl"><span class="dk">${lbl}</span><b class="dv" style="color:${leadC(m)}">${lead(m)} +${pc(Math.abs(m))} pontos</b><span class="dd">Lula ${pc(s)}% × Flávio ${pc(100-s)}%${extra||''}</span></div>`;
+    `<div class="dl"><span class="dk">${lbl}</span><b class="dv" style="color:${leadC(m)}">${lead(m)} à frente por ${pc(Math.abs(m))} pontos</b><span class="dd">Lula ${pc(s)}% × Flávio ${pc(100-s)}%${extra||''}</span></div>`;
   const ex=others&&t1&&t1.lp!=null?`<br><small>contando os outros candidatos: Lula ${pc(t1.lp)}% × Flávio ${pc(t1.fp)}%</small>`:'';
   let concl='';
   if(m1!=null&&m2!=null){
@@ -383,10 +384,20 @@ function extSame(){
   return {P,t1,t2,n:P.length,nomes:P.map(p=>p.nome)};
 }
 function exteriorParcial(){ const ex=D.exterior; return !!(ex.t2&&ex.t2.parcial); }
+// Frase da mudança: deixa claro que o número é a VANTAGEM, não votos ganhos
+function shiftTxt(t1,t2){
+  const m1=marg(t1), m2=marg(t2); if(m1==null||m2==null) return '';
+  const s1=share(t1), s2=share(t2), dl=s2-s1;
+  const quem=dl>0?'Lula':'Flávio', cor=dl>0?'var(--lula)':'var(--flavio)';
+  if((m1>=0)!==(m2>=0)) return `<b style="color:${leadC(m2)}">Virou:</b> ${lead(m1)} estava à frente no 1º turno, ${lead(m2)} está à frente no 2º.`;
+  const d=Math.abs(m2)-Math.abs(m1);
+  if(Math.abs(d)<1) return `A vantagem de ${lead(m2)} ficou praticamente igual.`;
+  return `A vantagem de ${lead(m2)} ${d<0?'<b>caiu':'<b>subiu'} ${pc(Math.abs(d))} pontos</b>: <b style="color:${cor}">${quem}</b> ganhou espaço (Lula foi de ${pc(s1)}% para ${pc(s2)}%).`;
+}
 function pies(t1,t2,t2label,t1label){
   const m1=marg(t1), m2=marg(t2);
   return `<div class="pies">${pieChart(t1,true,t1label||'1º turno')}${pieChart(t2,false,t2label||'2º turno')}</div>
-  <p class="pdiff">${m1!=null?`1º: <b style="color:${leadC(m1)}">${lead(m1)} +${pc(Math.abs(m1))} pts</b>`:''}${m2!=null?` · 2º: <b style="color:${leadC(m2)}">${lead(m2)} +${pc(Math.abs(m2))} pts</b>`:' · 2º: aguardando'}</p>`;
+  <p class="pdiff">${m1!=null?`<span><b style="color:${leadC(m1)}">${lead(m1)}</b> à frente por <b>${pc(Math.abs(m1))}</b> pontos no 1º turno</span>`:''}${m2!=null?`<span><b style="color:${leadC(m2)}">${lead(m2)}</b> à frente por <b>${pc(Math.abs(m2))}</b> pontos no 2º turno</span>`:'<span>2º turno: aguardando</span>'}${m1!=null&&m2!=null?`<span class="shift">${shiftTxt(t1,t2)}</span>`:''}</p>`;
 }
 function compare(t1,t2,opt={}){
   const tg=tags(t1,t2).filter(([t])=>!(isPartial(t2)&&/votos/.test(t))).map(([t,c])=>`<span class="tag" style="--c:${c}">${t}</span>`).join('');
@@ -404,7 +415,7 @@ function compare(t1,t2,opt={}){
 }
 function row(href,name,small,t1,t2){
   const r=read(t1,t2), m1=marg(t1), m2=marg(t2);
-  const v=m=>m==null?'<span class="mut">—</span>':`<b style="color:${leadC(m)}">${lead(m)} +${pc(Math.abs(m))}</b>`;
+  const v=m=>m==null?'<span class="mut">—</span>':`<b style="color:${leadC(m)}">${lead(m)}</b> à frente por <b style="color:${leadC(m)}">${pc(Math.abs(m))}</b>`;
   const n=Math.min(...[nVotes(t1),nVotes(t2)].filter(x=>x!=null));
   const flags=(isFinite(n)&&n<SMALL&&m2!=null?'<span class="flag">poucos votos</span>':'')+(isPartial(t2)?`<span class="flag">${pc(t2.pst)}% apurado</span>`:'');
   return `<a class="row" href="${href}"><span class="nm">${esc(name)}${small?`<small>${esc(small)}</small>`:''}</span><span class="go" aria-hidden="true">›</span>
