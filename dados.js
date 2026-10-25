@@ -58,11 +58,11 @@ window.URNAS = {
       /* ---------- Ásia ---------- */
       { id: "japao", nome: "Japão", cont: "Ásia", eleitores: 88293, status: "aberto",
         t1: { f: 24601, l: 5234 }, t2: { f: 28538, l: 7098 },
-        nota: "3º maior eleitorado brasileiro fora do país. 2º turno: soma dos boletins de urna (CNN e Metrópoles).",
+        nota: "3º maior eleitorado brasileiro fora do país. Total do 2º turno confere em três fontes (CNN, Metrópoles, Revista Fórum): 119 de 119 urnas.",
         cidades: [
-          { id: "nagoia", nome: "Nagoia", t1: { f: 11480, l: 2022 }, t2: { f: 13284, l: 2877 }, status: "aberto", nota: "58 boletins, todos os da jurisdição." },
-          { id: "toquio", nome: "Tóquio", t1: { f: 8423, l: 2328 }, t2: { f: 9770, l: 2995 }, status: "calc", nota: "Calculado: total do Japão menos Nagoia e Hamamatsu. Atenção: o total do Japão e os números de Nagoia e Hamamatsu vêm de fontes publicadas em horários diferentes, então este número pode estar um pouco torto até o TSE divulgar Tóquio." },
-          { id: "hamamatsu", nome: "Hamamatsu", t1: { f: 4698, l: 884 }, t2: { f: 5484, l: 1226 }, status: "aberto", nota: "18 boletins, o mesmo número do 1º turno." } ] },
+          { id: "nagoia", nome: "Nagoia", t1: { f: 11480, l: 2022 }, t2: { f: 13284, l: 2877 }, status: "aberto", nota: "58 boletins, todos os da jurisdição (inclui Toyohashi). 2º turno: soma de boletins publicada por um blog (Jair Sampaio), ainda não confirmada por fonte grande." },
+          { id: "toquio", nome: "Tóquio (com Oizumi)", t1: { f: 8423, l: 2328 }, t2: { f: 9770, l: 2995 }, status: "calc", nota: "Jurisdição de Tóquio: 43 urnas, 26 na cidade de Tóquio (Ariake) e 17 em Oizumi (Gunma). 1º turno: Exame, por jurisdição; só a cidade de Tóquio teve Flávio 3.941 × Lula 1.418 (Alternativa). 2º turno: nenhuma fonte grande publicou Tóquio separado, então este número é uma CONTA: total do Japão (CNN, Metrópoles) menos Nagoia e Hamamatsu (blog Jair Sampaio). As urnas batem (58 + 18 + 43 = 119), mas pode ficar um pouco diferente do número oficial do TSE." },
+          { id: "hamamatsu", nome: "Hamamatsu", t1: { f: 4698, l: 884 }, t2: { f: 5484, l: 1226 }, status: "aberto", nota: "18 boletins, o mesmo número do 1º turno. 2º turno: soma de boletins publicada por um blog (Jair Sampaio), ainda não confirmada por fonte grande." } ] },
       { id: "china", nome: "China", cont: "Ásia", status: "aberto",
         t1: { f: 203, l: 367 }, t2: { f: 267, l: 502 },
         nota: "Inclui Hong Kong. Atenção: o 1º turno é a soma dos boletins divulgados no dia, e o 2º vem de outra fonte, que pode não ter as mesmas urnas. Trate a comparação como aproximada.",
@@ -169,6 +169,10 @@ window.URNAS = {
     ["CNN: 2º turno no exterior por país", "https://www.cnnbrasil.com.br/internacional/eleicoes-2026-exterior-boletins-urna-flavio-lula/"],
     ["CNN: Coreia do Sul", "https://www.cnnbrasil.com.br/eleicoes/na-coreia-do-sul-lula-tem-643-no-2o-turno-flavio-356/"],
     ["Jair Sampaio: Nagoia e Hamamatsu no 2º turno", "https://www.jairsampaio.com/flavio-bolsonaro-amplia-votacao-no-japao-e-supera-81-dos-votos-validos-em-hamamatsu-e-nagoya-no-2o-turno/"],
+    ["Alternativa: cidade de Tóquio e Toyohashi no 1º turno", "https://alternativa.co.jp/noticias/comunidade/199632/flavio-bolsonaro-obtem-6380-dos-votos-em-toquio-e-7351-em-toyohashi-apontam-boletins-de-urna/"],
+    ["Metrópoles: Japão no 2º turno", "https://www.metropoles.com/mundo/flavio-bolsonaro-vence-lula-no-japao-no-2o-turno-das-eleicoes"],
+    ["Revista Fórum: Lula no Japão", "https://revistaforum.com.br/politica/lula-no-japao-recorde-votos-2026/"],
+    ["Exame: Japão por jurisdição no 1º turno", "https://exame.com/brasil/eleicoes-2026-flavio-bolsonaro-lidera-no-japao-com-67-dos-votos/"],
     ["Portal Mie: Japão e China no 1º turno", "https://portalmie.com/atualidade/2026/10/eleicoes-2026-veja-como-brasileiros-votaram-no-japao-e-pelo-mundo/"],
     ["Metrópoles: Taiwan e Ásia no 1º turno", "https://www.metropoles.com/mundo/brasileiros-votam-o-exterior"],
     ["Exame: Hong Kong, Tailândia e Filipinas no 1º turno", "https://exame.com/brasil/votacao-para-presidente-no-exterior-veja-quem-venceu-no-japao-china-e-nova-zelandia/"]
