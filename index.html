@@ -218,6 +218,7 @@ footer{padding-block:20px 60px;color:var(--muted);font-size:14px;display:grid;ga
 <script>
 (function(){
 const D=window.URNAS, V=document.getElementById('view');
+let T=null;   // dados-tse.json (preenchido mais abaixo)
 const fmt=n=>Math.round(n).toLocaleString('pt-BR');
 const pc=n=>n.toFixed(1).replace('.',',');
 const sgn=n=>(n>0?'+':n<0?'−':'±')+fmt(Math.abs(n));
@@ -478,8 +479,10 @@ function home(){
   return {crumbs:[], html:`
   <div class="kicker">Rota das Urnas</div>
   <h1>1º turno × 2º turno</h1>
-  <p class="lg">Em 4 de outubro, Flávio Bolsonaro (PL) ficou em primeiro e Lula (PT) em segundo. Hoje os dois se enfrentam de novo. Escolha onde quer olhar.</p>
+  <p class="lg">Em 4 de outubro, Flávio Bolsonaro (PL) ficou em primeiro e Lula (PT) em segundo. Em 25 de outubro, os dois se enfrentaram no 2º turno. Escolha onde quer olhar.</p>
   <div class="live" role="status"><span class="dot" aria-hidden="true"></span><span>${esc(D.aviso)}</span></div>
+  ${D.imprensa&&!(T&&T.brasil&&T.brasil.pst!=null&&T.brasil.pst>=D.imprensa.pst)?`<p class="warn"><b>Número mais recente da imprensa</b> (${esc(D.imprensa.fonte)}, ${esc(D.imprensa.hora)}): com ${pc(D.imprensa.pst)}% das urnas, Lula tem ${pc(D.imprensa.lp)}% e Flávio ${pc(D.imprensa.fp)}% dos votos válidos. ${esc(D.imprensa.texto)} Os gráficos abaixo usam o último arquivo baixado do TSE e são atualizados a cada hora.</p>`:''}
+  ${D.contexto?`<p class="note">${esc(D.contexto)}</p>`:''}
   <div class="pleg"><span style="--c:var(--lula)"><i></i>Lula (PT)</span><span style="--c:var(--flavio)"><i></i>Flávio Bolsonaro (PL)</span><span style="--c:var(--outros)"><i></i>Outros candidatos (só no 1º turno)</span></div>
   <div class="doors">
     <a class="door" href="#/brasil"><span class="t"><b>Brasil</b><span>5 regiões · 27 estados ›</span></span>${pies({l:b.l,f:b.f,validos:b.validos,lp:b.l/b.validos*100,fp:b.f/b.validos*100},BR())}${isPartial(BR())?`<p class="warn">Apuração em andamento: ${pc(BR().pst)}% das urnas. A pizza do 2º turno ainda vai mudar.</p>`:''}<p>Toque para ver o mapa e escolher a região ou o estado.</p></a>
@@ -591,7 +594,6 @@ route();
 /* ---------- dados do TSE (GitHub Action de hora em hora) ---------- */
 const REPO_RAW='https://raw.githubusercontent.com/fcarvalhodev/rota-das-urnas/main/dados-tse.json';
 const CRON_MIN=5;                  // a Action roda no minuto 5 de toda hora (UTC)
-let T=null;
 async function getTSE(){
   for(const u of [REPO_RAW+'?t='+Date.now(),'dados-tse.json?t='+Date.now()]){
     try{ const r=await fetch(u,{cache:'no-store'}); if(r.ok){ const j=await r.json(); if(j&&'brasil' in j) return j; } }catch(e){}

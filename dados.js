@@ -5,7 +5,10 @@
            · "calc" Calculado (conta feita aqui a partir de outros números) · "alegacao" ainda sem confirmação.
    Para atualizar: preencha t2 = {f, l} e troque o status. O site recalcula tudo sozinho. */
 window.URNAS = {
-  atualizado: "26/10/2026 · 2h55 no Japão · 14h55 em Brasília (exterior: parcial das 13h54)",
+  atualizado: "26/10/2026 · 9h40 no Japão · 21h40 de 25/10 em Brasília",
+  imprensa: { pst: 99.87, lp: 51.76, fp: 48.24, hora: "21h25 de Brasília", fonte: "InfoMoney",
+    texto: "Os principais veículos noticiam a reeleição de Lula. O resultado oficial é o proclamado pelo TSE." },
+  contexto: "A votação do 2º turno foi prorrogada até as 19h em todo o país por decisão do ministro Cristiano Zanin, do STF, a pedido da coligação de Lula, que alegou redução de ônibus em cidades da Bahia e de São Paulo. Por isso a apuração só começou depois das 19h de Brasília.",
   aviso: "Exterior: Ásia, Oceania, Oriente Médio, África e parte da Europa já apurados por boletim de urna. Portugal, Américas e o resto da Europa ainda estão votando ou contando. O TSE divulga tudo a partir das 17h de Brasília (5h de segunda no Japão).",
 
   brasil: {
@@ -96,7 +99,7 @@ window.URNAS = {
       { id: "nova-zelandia", nome: "Nova Zelândia", cont: "Oceania", status: "aberto", t1: { f: 64, l: 234 }, t2: { f: 101, l: 418 }, nota: "Wellington. Primeiro país a fechar as urnas." },
       /* ---------- Américas ---------- */
       { id: "estados-unidos", nome: "Estados Unidos", cont: "Américas", eleitores: 265022, status: "doc",
-        t1: { f: 45004, l: 23335 }, t2: null, nota: "Maior eleitorado brasileiro fora do país.",
+        t1: { f: 45004, l: 23335 }, t2: null, nota: "Maior eleitorado brasileiro fora do país. 2º turno, imprensa (InfoMoney, 21h17 de Brasília): com 314 de 358 seções, Flávio 65,7% × Lula 34,3%. O número de votos ainda não foi publicado; o site completa quando sair.",
         cidades: [
           { id: "boston", nome: "Boston", t1: { f: 11228, l: 3919 }, t2: null },
           { id: "miami", nome: "Miami", t1: { f: 8914, l: 2260 }, t2: null },
@@ -120,7 +123,7 @@ window.URNAS = {
       { id: "dinamarca", nome: "Dinamarca", cont: "Europa", status: "aberto", t1: { f: 195, l: 1166 }, t2: { f: 243, l: 1383 }, nota: "Copenhague, 4 de 4 urnas." },
       { id: "finlandia", nome: "Finlândia", cont: "Europa", status: "aberto", t1: null, t2: { f: 185, l: 550 }, nota: "Helsinque, 2 de 2 urnas. Sem o número exato do 1º turno nas fontes consultadas (Lula teve 68,5%)." },
       { id: "grecia", nome: "Grécia", cont: "Europa", status: "aberto", t1: null, t2: { f: 311, l: 255 }, nota: "Atenas, 2 de 2 urnas. No 1º turno, Flávio teve 230 votos (46,6%); o número exato de Lula não está nas fontes." },
-      { id: "portugal", nome: "Portugal", cont: "Europa", eleitores: 134374, status: "doc", t1: { f: 19412, l: 26401 }, t2: null, nota: "2º maior eleitorado brasileiro fora do país.",
+      { id: "portugal", nome: "Portugal", cont: "Europa", eleitores: 134374, status: "doc", t1: { f: 19412, l: 26401 }, t2: null, nota: "2º maior eleitorado brasileiro fora do país. 2º turno, imprensa (InfoMoney): apuração concluída, Lula 59,4% × Flávio 40,6%. O número de votos ainda não foi publicado; o site completa quando sair.",
         cidades: [
           { id: "lisboa", nome: "Lisboa", t1: { f: 10548, l: 14948 }, t2: null },
           { id: "porto", nome: "Porto", t1: { f: 7559, l: 10356 }, t2: null },
@@ -130,7 +133,7 @@ window.URNAS = {
           { id: "berlim", nome: "Berlim", t1: { f: 925, l: 6504 }, t2: null },
           { id: "frankfurt", nome: "Frankfurt", t1: { f: 1320, l: 3657 }, t2: null },
           { id: "munique", nome: "Munique", t1: { f: 1287, l: 3364 }, t2: null } ] },
-      { id: "reino-unido", nome: "Reino Unido", cont: "Europa", eleitores: 41895, status: "doc", t1: { f: 5366, l: 8640 }, t2: null,
+      { id: "reino-unido", nome: "Reino Unido", cont: "Europa", eleitores: 41895, status: "doc", t1: { f: 5366, l: 8640 }, t2: null, nota: "2º turno, imprensa (InfoMoney): apuração concluída, Lula 63,3% × Flávio 36,7%. O número de votos ainda não foi publicado; o site completa quando sair.",
         cidades: [
           { id: "londres", nome: "Londres", t1: { f: 5227, l: 8152 }, t2: null },
           { id: "edimburgo", nome: "Edimburgo", t1: { f: 139, l: 488 }, t2: null } ] },
@@ -161,6 +164,8 @@ window.URNAS = {
     ["Hub Político: 1º turno por estado (dados do TSE)", "https://hubpolitico.com.br/eleicoes/2026/apuracao/presidente/estados"],
     ["Hub Político: 1º turno por região", "https://hubpolitico.com.br/eleicoes/2026/apuracao/presidente/regioes"],
     ["Elves: 1º turno por país e cidade (dados do TSE)", "https://elves.com.br/apuracao-eleitoral/paises/"],
+    ["InfoMoney: apuração ao vivo do 2º turno", "https://www.infomoney.com.br/politica/ao-vivo-eleicoes-segundo-turno-2026/"],
+    ["CNN: Zanin prorroga a eleição até as 19h", "https://www.cnnbrasil.com.br/eleicoes/zanin-prorroga-eleicao-ate-as-19h-deste-domingo-em-todo-o-pais/"],
     ["Congresso em Foco: 41 países no 2º turno, 13h54", "https://www.congressoemfoco.com.br/noticia/123603/primeiras-urnas-sao-apuradas-no-exterior-acompanhe-os-resultados"],
     ["Elves: Líbano, Áustria, Dinamarca e Catar no 1º turno", "https://elves.com.br/apuracao-eleitoral/paises/"],
     ["Brasil 247: Emirados Árabes no 2º turno", "https://www.brasil247.com/mundo/eleicoes-no-exterior-flavio-bolsonaro-vence-o-2o-turno-nos-emirados-arabes-unidos/"],
