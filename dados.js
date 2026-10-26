@@ -8,7 +8,64 @@ window.URNAS = {
   atualizado: "26/10/2026 · 9h40 no Japão · 21h40 de 25/10 em Brasília",
   imprensa: { pst: 99.87, lp: 51.76, fp: 48.24, hora: "21h25 de Brasília", fonte: "InfoMoney",
     texto: "Os principais veículos noticiam a reeleição de Lula. O resultado oficial é o proclamado pelo TSE." },
-  contexto: "A votação do 2º turno foi prorrogada até as 19h em todo o país por decisão do ministro Cristiano Zanin, do STF, a pedido da coligação de Lula, que alegou redução de ônibus em cidades da Bahia e de São Paulo. Por isso a apuração só começou depois das 19h de Brasília.",
+  contexto: "A votação do 2º turno foi prorrogada até as 19h em todo o país por decisão do ministro Cristiano Zanin, do STF, a pedido da coligação de Lula, que alegou redução de ônibus em cidades da Bahia e de São Paulo. A campanha de Flávio também tinha pedido mais tempo, só em cidades de São Paulo, Paraná e Santa Catarina, por causa da chuva. Por isso a apuração só começou depois das 19h de Brasília. Flávio não reconhece o resultado e pediu a anulação da eleição.",
+  /* frases checadas sobre a prorrogação: v Verdade · m Meia verdade · f Falso · u Não demonstrado */
+  vf: [
+   {
+    "v": "v",
+    "c": "“Lula pediu duas horas a mais de votação.”",
+    "b": "A coligação de Lula pediu ao STF que a votação fosse prorrogada por duas horas em todo o país, e o ministro Cristiano Zanin concedeu: as urnas ficaram abertas até as 19h. Antes, ela tinha pedido ao TSE mais tempo só em cidades da Bahia e de outros estados, alegando falta de ônibus.",
+    "s": [
+     "CNN: Zanin prorroga a eleição até as 19h",
+     "https://www.cnnbrasil.com.br/eleicoes/zanin-prorroga-eleicao-ate-as-19h-deste-domingo-em-todo-o-pais/"
+    ]
+   },
+   {
+    "v": "f",
+    "c": "“Só o lado de Lula pediu mais tempo.”",
+    "b": "A campanha de Flávio também pediu ao TSE prorrogação até as 19h, só em cidades de São Paulo, Paraná e Santa Catarina, por causa de chuvas, alagamentos e falta de energia. A diferença é que o pedido de Lula foi ao STF e valeu para o país inteiro.",
+    "s": [
+     "Poder360: os pedidos das duas campanhas",
+     "https://www.poder360.com.br/poder-eleicoes-2026/campanhas-de-lula-e-flavio-pedem-mais-tempo-de-votacao/"
+    ]
+   },
+   {
+    "v": "v",
+    "c": "“Quem decidiu foi um ex-advogado de Lula.”",
+    "b": "Cristiano Zanin defendeu Lula nos processos da Lava Jato antes de virar ministro do STF, em 2023. Ele foi o relator sorteado do pedido.",
+    "s": [
+     "Estado de Minas: Flávio pede anulação",
+     "https://www.em.com.br/politica/2026/10/7527711-flavio-pede-anulacao-da-eleicao-inexplicavel-sacanagem.html"
+    ]
+   },
+   {
+    "v": "f",
+    "c": "“A prorrogação valeu igual em todo o país.”",
+    "b": "Em muitas seções, a decisão chegou depois que as urnas já tinham sido fechadas, e elas não puderam ser reabertas. Algumas seções usaram cédula de papel. É o principal argumento de Flávio: a regra mudou no meio do jogo e não valeu igual para todos. O presidente do TSE, Kassio Nunes Marques, diz que a decisão foi cumprida e não mudou o resultado.",
+    "s": [
+     "Gazeta do Povo: diferença de votos e anulação",
+     "https://www.gazetadopovo.com.br/eleicoes/2026/diferenca-de-votos-na-vitoria-de-lula-sobre-flavio-dificulta-anulacao-da-eleicao/"
+    ]
+   },
+   {
+    "v": "u",
+    "c": "“As duas horas a mais deram a vitória a Lula.”",
+    "b": "Lula venceu por cerca de 4,4 milhões de votos: 51,79% contra 48,21%, com 100% das urnas apuradas. Ninguém divulgou quantas pessoas votaram depois das 17h. Especialistas dizem que, para anular, seria preciso mostrar um prejuízo maior que essa diferença.",
+    "s": [
+     "Gazeta do Povo: diferença de votos e anulação",
+     "https://www.gazetadopovo.com.br/eleicoes/2026/diferenca-de-votos-na-vitoria-de-lula-sobre-flavio-dificulta-anulacao-da-eleicao/"
+    ]
+   },
+   {
+    "v": "u",
+    "c": "“A eleição vai ser anulada.”",
+    "b": "Flávio pediu a anulação. A lei prevê nova eleição só se os problemas atingirem mais da metade dos votos do país. Os especialistas ouvidos pela imprensa consideram a anulação muito difícil, e não há precedente no Brasil. A decisão é da Justiça Eleitoral.",
+    "s": [
+     "A Gazeta: o que dizem os especialistas",
+     "https://www.agazeta.com.br/mundo/eleicao-ainda-pode-ser-anulada-analistas-apontam-infracao-mas-diferenca-de-votos-enfraquece-possibilidade-1026"
+    ]
+   }
+  ],
   aviso: "Exterior: Ásia, Oceania, Oriente Médio, África e parte da Europa já apurados por boletim de urna. Portugal, Américas e o resto da Europa ainda estão votando ou contando. O TSE divulga tudo a partir das 17h de Brasília (5h de segunda no Japão).",
 
   brasil: {
@@ -166,6 +223,10 @@ window.URNAS = {
     ["Elves: 1º turno por país e cidade (dados do TSE)", "https://elves.com.br/apuracao-eleitoral/paises/"],
     ["InfoMoney: apuração ao vivo do 2º turno", "https://www.infomoney.com.br/politica/ao-vivo-eleicoes-segundo-turno-2026/"],
     ["CNN: Zanin prorroga a eleição até as 19h", "https://www.cnnbrasil.com.br/eleicoes/zanin-prorroga-eleicao-ate-as-19h-deste-domingo-em-todo-o-pais/"],
+    ["Poder360: os pedidos das duas campanhas", "https://www.poder360.com.br/poder-eleicoes-2026/campanhas-de-lula-e-flavio-pedem-mais-tempo-de-votacao/"],
+    ["Estado de Minas: Flávio pede anulação", "https://www.em.com.br/politica/2026/10/7527711-flavio-pede-anulacao-da-eleicao-inexplicavel-sacanagem.html"],
+    ["Gazeta do Povo: diferença de votos e anulação", "https://www.gazetadopovo.com.br/eleicoes/2026/diferenca-de-votos-na-vitoria-de-lula-sobre-flavio-dificulta-anulacao-da-eleicao/"],
+    ["A Gazeta: o que dizem os especialistas", "https://www.agazeta.com.br/mundo/eleicao-ainda-pode-ser-anulada-analistas-apontam-infracao-mas-diferenca-de-votos-enfraquece-possibilidade-1026"],
     ["Congresso em Foco: 41 países no 2º turno, 13h54", "https://www.congressoemfoco.com.br/noticia/123603/primeiras-urnas-sao-apuradas-no-exterior-acompanhe-os-resultados"],
     ["Elves: Líbano, Áustria, Dinamarca e Catar no 1º turno", "https://elves.com.br/apuracao-eleitoral/paises/"],
     ["Brasil 247: Emirados Árabes no 2º turno", "https://www.brasil247.com/mundo/eleicoes-no-exterior-flavio-bolsonaro-vence-o-2o-turno-nos-emirados-arabes-unidos/"],

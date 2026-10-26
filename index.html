@@ -117,6 +117,8 @@ p{margin:0}
 .delta b{font-family:var(--display);font-stretch:66%;font-weight:800;font-size:34px;line-height:1.05;color:var(--c)}
 .delta span{font-family:var(--ui);font-size:14px;color:var(--muted)}
 .badge{justify-self:start;font-family:var(--ui);font-weight:800;font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:2px 9px;border-radius:999px;border:2px solid var(--c);color:var(--c);background:var(--s)}
+.badge.v{--c:var(--ok);--s:var(--ok-soft)} .badge.m{--c:var(--part);--s:var(--part-soft)} .badge.f{--c:var(--no);--s:var(--no-soft)} .badge.u{--c:var(--calc);--s:var(--calc-soft)}
+.vf{display:grid;gap:10px}.vf .card{gap:8px;border-left:5px solid var(--c)}.vf .card p{margin:0}.vf .claim{font-family:var(--ui);font-weight:800;font-size:17px;line-height:1.3}
 .badge.doc{--c:var(--ok);--s:var(--ok-soft)} .badge.aberto{--c:var(--part);--s:var(--part-soft)} .badge.alegacao{--c:var(--no);--s:var(--no-soft)} .badge.calc{--c:var(--calc);--s:var(--calc-soft)}
 
 /* listas clicáveis */
@@ -224,6 +226,7 @@ const pc=n=>n.toFixed(1).replace('.',',');
 const sgn=n=>(n>0?'+':n<0?'−':'±')+fmt(Math.abs(n));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const LBL={doc:'Documentado',aberto:'Em aberto',alegacao:'Alegação',calc:'Calculado'};
+const VLBL={v:['Verdade','var(--ok)'],m:['Meia verdade','var(--part)'],f:['Falso','var(--no)'],u:['Não demonstrado','var(--calc)']};
 const LBLX={doc:'resultado completo do TSE',aberto:'parcial ou soma de boletins de urna',alegacao:'ainda sem confirmação',calc:'conta feita aqui a partir de outros números'};
 
 /* ---------- contas ---------- */
@@ -488,6 +491,7 @@ function home(){
     <a class="door" href="#/brasil"><span class="t"><b>Brasil</b><span>5 regiões · 27 estados ›</span></span>${pies({l:b.l,f:b.f,validos:b.validos,lp:b.l/b.validos*100,fp:b.f/b.validos*100},BR())}${isPartial(BR())?`<p class="warn">Apuração em andamento: ${pc(BR().pst)}% das urnas. A pizza do 2º turno ainda vai mudar.</p>`:''}<p>Toque para ver o mapa e escolher a região ou o estado.</p></a>
     <a class="door" href="#/exterior"><span class="t"><b>Exterior</b><span>${ex.paises.length} países ›</span></span>${exteriorParcial()?(()=>{const S=extSame();return pies(S.t1,S.t2,'2º turno',`1º turno`)+`<p class="warn">Só os ${S.n} países que já têm os dois turnos (${S.nomes.join(', ')}). O Japão sozinho tem ${Math.round(extJp(S))}% desses votos. Isso é só cerca de ${Math.round(extFrac())}% dos votos do exterior: Europa, Américas, África e Oriente Médio ainda não foram contados.</p>`;})():pies(ex.t1,ex.t2,'2º turno')}<p>Toque para escolher o país e depois a cidade.</p></a>
   </div>
+  ${D.vf&&D.vf.length?`<section style="display:grid;gap:10px"><h2>A prorrogação até as 19h: é verdade?</h2><p class="sub">O que circula sobre as duas horas a mais, checado com o mesmo critério para os dois lados.</p><div class="vf">${D.vf.map(x=>`<div class="card" style="--c:${VLBL[x.v][1]}"><span class="badge ${x.v}">${VLBL[x.v][0]}</span><p class="claim">${esc(x.c)}</p><p class="note">${esc(x.b)}</p><p class="note"><a href="${x.s[1]}" target="_blank" rel="noopener">Fonte: ${esc(x.s[0])}</a></p></div>`).join('')}</div></section>`:''}
   ${placesDone.length?`<section style="display:grid;gap:10px"><h2>Já dá para comparar</h2><p class="sub">Países do exterior que já têm os dois turnos, do que tem mais votos para o que tem menos. Onde votaram poucas pessoas, a diferença pula muito com poucos votos.</p><div class="list">${placesDone.slice(0,5).map(x=>{const p=ex.paises.find(p=>'#/exterior/'+p.id===x.h);return row(x.h,x.n,p.cont,p.t1,p.t2)}).join('')}</div><a class="note" href="#/exterior">Ver todos os países ›</a></section>`:''}
   <section style="display:grid;gap:10px"><h2>Como comparar sem enganar</h2>
   <p class="sub">No 1º turno havia 13 candidatos, então a porcentagem dos dois sempre sobe no 2º. Por isso cada tela mostra duas contas:</p>
