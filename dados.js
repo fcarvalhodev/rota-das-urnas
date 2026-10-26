@@ -8,13 +8,13 @@ window.URNAS = {
   atualizado: "26/10/2026 · 9h40 no Japão · 21h40 de 25/10 em Brasília",
   imprensa: { pst: 99.87, lp: 51.76, fp: 48.24, hora: "21h25 de Brasília", fonte: "InfoMoney",
     texto: "Os principais veículos noticiam a reeleição de Lula. O resultado oficial é o proclamado pelo TSE." },
-  contexto: "A votação do 2º turno foi prorrogada até as 19h em todo o país por decisão do ministro Cristiano Zanin, do STF, a pedido da coligação de Lula, que alegou redução de ônibus em cidades da Bahia e de São Paulo. A campanha de Flávio também tinha pedido mais tempo, só em cidades de São Paulo, Paraná e Santa Catarina, por causa da chuva. Por isso a apuração só começou depois das 19h de Brasília. Flávio não reconhece o resultado e pediu a anulação da eleição.",
+  contexto: "A votação do 2º turno foi prorrogada até as 19h em todo o país por decisão do ministro Cristiano Zanin, do STF, a pedido da coligação de Lula, que alegou redução de ônibus em cidades da Bahia e de São Paulo. O motivo do pedido de Lula não foi chuva. Quem falou em chuva foi a campanha de Flávio, que também pediu mais tempo, só em algumas cidades do Sul e do Sudeste. Por isso a apuração só começou depois das 19h de Brasília. Flávio não reconhece o resultado e pediu a anulação da eleição.",
   /* frases checadas sobre a prorrogação: v Verdade · m Meia verdade · f Falso · u Não demonstrado */
   vf: [
    {
-    "v": "v",
-    "c": "“Lula pediu duas horas a mais de votação.”",
-    "b": "A coligação de Lula pediu ao STF que a votação fosse prorrogada por duas horas em todo o país, e o ministro Cristiano Zanin concedeu: as urnas ficaram abertas até as 19h. Antes, ela tinha pedido ao TSE mais tempo só em cidades da Bahia e de outros estados, alegando falta de ônibus.",
+    "v": "m",
+    "c": "“Lula pediu duas horas a mais de votação por causa da chuva.”",
+    "b": "Metade é verdade. A coligação de Lula pediu ao STF que a votação fosse prorrogada por duas horas em todo o país, e o ministro Cristiano Zanin concedeu: as urnas ficaram abertas até as 19h. Mas o motivo não foi chuva: o PT citou falta de ônibus em Salvador, Feira de Santana e Lauro de Freitas, na Bahia, e em São Paulo, e a decisão de Zanin fala de transporte. Quem citou chuva foi a campanha de Flávio.",
     "s": [
      "CNN: Zanin prorroga a eleição até as 19h",
      "https://www.cnnbrasil.com.br/eleicoes/zanin-prorroga-eleicao-ate-as-19h-deste-domingo-em-todo-o-pais/"
@@ -23,7 +23,7 @@ window.URNAS = {
    {
     "v": "f",
     "c": "“Só o lado de Lula pediu mais tempo.”",
-    "b": "A campanha de Flávio também pediu ao TSE prorrogação até as 19h, só em cidades de São Paulo, Paraná e Santa Catarina, por causa de chuvas, alagamentos e falta de energia. A diferença é que o pedido de Lula foi ao STF e valeu para o país inteiro.",
+    "b": "A campanha de Flávio também pediu ao TSE prorrogação até as 19h, só em algumas cidades, por causa de chuvas, alagamentos e falta de energia. As reportagens não batem sobre quais: São Paulo, Paraná e Santa Catarina, segundo Poder360 e CartaCapital; também Minas Gerais e Rio Grande do Sul, segundo o Estado de Minas. A diferença é que o pedido de Lula foi ao STF e valeu para o país inteiro.",
     "s": [
      "Poder360: os pedidos das duas campanhas",
      "https://www.poder360.com.br/poder-eleicoes-2026/campanhas-de-lula-e-flavio-pedem-mais-tempo-de-votacao/"
@@ -223,6 +223,8 @@ window.URNAS = {
     ["Elves: 1º turno por país e cidade (dados do TSE)", "https://elves.com.br/apuracao-eleitoral/paises/"],
     ["InfoMoney: apuração ao vivo do 2º turno", "https://www.infomoney.com.br/politica/ao-vivo-eleicoes-segundo-turno-2026/"],
     ["CNN: Zanin prorroga a eleição até as 19h", "https://www.cnnbrasil.com.br/eleicoes/zanin-prorroga-eleicao-ate-as-19h-deste-domingo-em-todo-o-pais/"],
+    ["CartaCapital: Lula e Flávio pedem prorrogação até as 19h", "https://www.cartacapital.com.br/politica/lula-e-flavio-bolsonaro-pedem-ao-tse-prorrogacao-da-votacao-ate-as-19h/"],
+    ["CNN: entenda o pedido do PT", "https://www.cnnbrasil.com.br/eleicoes/entenda-pedido-do-pt-para-estender-horario-de-votacao/"],
     ["Poder360: os pedidos das duas campanhas", "https://www.poder360.com.br/poder-eleicoes-2026/campanhas-de-lula-e-flavio-pedem-mais-tempo-de-votacao/"],
     ["Estado de Minas: Flávio pede anulação", "https://www.em.com.br/politica/2026/10/7527711-flavio-pede-anulacao-da-eleicao-inexplicavel-sacanagem.html"],
     ["Gazeta do Povo: diferença de votos e anulação", "https://www.gazetadopovo.com.br/eleicoes/2026/diferenca-de-votos-na-vitoria-de-lula-sobre-flavio-dificulta-anulacao-da-eleicao/"],
