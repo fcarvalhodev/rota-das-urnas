@@ -59,10 +59,14 @@ window.URNAS = {
    {
     "v": "u",
     "c": "“A eleição vai ser anulada.”",
-    "b": "Flávio anunciou que vai pedir a anulação; até agora as reportagens não mostram o pedido protocolado. A lei prevê nova eleição só se os problemas atingirem mais da metade dos votos do país. Os especialistas ouvidos pela imprensa consideram a anulação muito difícil, e não há precedente no Brasil. A decisão é da Justiça Eleitoral.",
+    "b": "Flávio anunciou que vai pedir a anulação; até 12 de novembro, as reportagens não mostram pedido julgado. A lei prevê nova eleição só se os problemas atingirem mais da metade dos votos do país. Ministros do TSE e do STF disseram à imprensa que não veem motivo: foram cerca de 35 mil votos depois das 17h, contra uma diferença de 4,4 milhões, e o presidente do TSE, Nunes Marques, disse que as dificuldades não comprometeram a apuração. Flávio foi para os EUA e disse ao New York Times que será candidato se houver nova eleição. A decisão é da Justiça Eleitoral.",
     "s": [
      "A Gazeta: o que dizem os especialistas",
-     "https://www.agazeta.com.br/mundo/eleicao-ainda-pode-ser-anulada-analistas-apontam-infracao-mas-diferenca-de-votos-enfraquece-possibilidade-1026"
+     "https://www.agazeta.com.br/mundo/eleicao-ainda-pode-ser-anulada-analistas-apontam-infracao-mas-diferenca-de-votos-enfraquece-possibilidade-1026",
+     "Correio Braziliense: ministros do TSE e do STF",
+     "https://1news.correiobraziliense.com.br/noticia/901952/noticias/stf-e-tse-tomam-decisao-apos-flavio-bolsonaro-pedir-anulacao-das-eleicoes-26102026",
+     "Paraíba Online, com o New York Times",
+     "https://paraibaonline.com.br/brasil/2026/11/05/flavio-bolsonaro-avisa-que-levara-para-o-tumulo-como-fugiu-do-brasil/"
     ]
    }
   ],
